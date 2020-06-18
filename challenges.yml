@@ -1,0 +1,37 @@
+extending_instancedynamicdata:
+  question: |
+    Suppose we have a vue component that looks like this:
+
+    ```javascript
+    const app = new Vue({
+      el: '#app',
+      template: '<span class="title">{{ title }}</span>
+    });
+    ```
+
+    and the `title` is a data property that resides in that same component,
+    how would you go about initializing this data?
+  explanation: |
+    That's right! `data` is a `function` that returns an object. The properties
+    in this object will be accessible from the template! The function shorthand
+    syntax is best when defining these properties.
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```javascript
+          data: `title=''`,
+          ```
+        b: |
+          ```javascript
+          data() { return { title: '' }; },
+          ```
+        c: |
+          ```javascript
+          data() { title = ''; },
+          ```
+        d: |
+          ```javascript
+          data: '',
+          ```
+      correct: b
