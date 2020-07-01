@@ -1,6 +1,6 @@
 extending_instancedynamicdata:
   question: |
-    Suppose we have a vue component that looks like this:
+    Suppose we have a Vue component that looks like this:
 
     ```javascript
     const app = new Vue({
@@ -10,8 +10,8 @@ extending_instancedynamicdata:
     ```
 
     and you want to add `title` as a new "data" key to this component.
-    How could we do that *and* set its initial value to `Vue challenge!`
-    how would you go about initializing this data?
+    How could we do that *and* set its initial value to `Vue challenge!`.
+    How would you go about initializing this data?
   explanation: |
     That's right! `data` is a function that returns an object. The properties
     in this object will be accessible from the template! The function shorthand
@@ -21,18 +21,18 @@ extending_instancedynamicdata:
       choices:
         a: |
           ```javascript
-          data: `title=''`,
+          data: `title='Vue challenge!'`,
           ```
         b: |
           ```javascript
-          data() { return { title: '' }; },
+          data() { return { title: 'Vue challenge!' }; },
           ```
         c: |
           ```javascript
-          data() { title = ''; },
+          data() { title = 'Vue challenge!'; },
           ```
         d: |
           ```javascript
-          data: '',
+          data: 'Vue challenge!',
           ```
       correct: b
