@@ -9,12 +9,13 @@ extending_instancedynamicdata:
     });
     ```
 
-    and the `title` is a data property that resides in that same component,
+    and you want to add `title` as a new "data" key to this component.
+    How could we do that *and* set its initial value to `Vue challenge!`
     how would you go about initializing this data?
   explanation: |
-    That's right! `data` is a `function` that returns an object. The properties
+    That's right! `data` is a function that returns an object. The properties
     in this object will be accessible from the template! The function shorthand
-    syntax is best when defining these properties.
+    syntax - `data() {}` instead of `data: function() {}` - allows us to make our component more readable.
   features:
     multiple_choice:
       choices:
