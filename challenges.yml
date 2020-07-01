@@ -15,7 +15,7 @@ extending_instancedynamicdata:
   explanation: |
     That's right! `data` is a function that returns an object. The properties
     in this object will be accessible from the template! The function shorthand
-    syntax is best when defining these properties.
+    syntax - `data() {}` instead of `data: function() {}` - allows us to make our component more readable.
   features:
     multiple_choice:
       choices:
