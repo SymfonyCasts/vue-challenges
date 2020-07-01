@@ -1,0 +1,38 @@
+extending_instancedynamicdata:
+  question: |
+    Suppose we have a vue component that looks like this:
+
+    ```javascript
+    const app = new Vue({
+      el: '#app',
+      template: '<span class="title">{{ title }}</span>
+    });
+    ```
+
+    and you want to add `title` as a new "data" key to this component.
+    How could we do that *and* set its initial value to `Vue challenge!`
+    how would you go about initializing this data?
+  explanation: |
+    That's right! `data` is a function that returns an object. The properties
+    in this object will be accessible from the template! The function shorthand
+    syntax - `data() {}` instead of `data: function() {}` - allows us to make our component more readable.
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```javascript
+          data: `title=''`,
+          ```
+        b: |
+          ```javascript
+          data() { return { title: '' }; },
+          ```
+        c: |
+          ```javascript
+          data() { title = ''; },
+          ```
+        d: |
+          ```javascript
+          data: '',
+          ```
+      correct: b
