@@ -13,7 +13,7 @@ extending_instancedynamicdata:
     How could we do that *and* set its initial value to `Vue challenge!`
     how would you go about initializing this data?
   explanation: |
-    That's right! `data` is a `function` that returns an object. The properties
+    That's right! `data` is a function that returns an object. The properties
     in this object will be accessible from the template! The function shorthand
     syntax is best when defining these properties.
   features:
