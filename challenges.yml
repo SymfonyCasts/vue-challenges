@@ -15,7 +15,8 @@ extending_instancedynamicdata:
   explanation: |
     That's right! `data` is a function that returns an object. The properties
     in this object will be accessible from the template! The function shorthand
-    syntax - `data() {}` instead of `data: function() {}` - allows us to make our component more readable.
+    syntax - `data() {}` instead of `data: function() {}` - allows us to make our
+    component more readable.
   features:
     multiple_choice:
       choices:
@@ -34,5 +35,149 @@ extending_instancedynamicdata:
         d: |
           ```javascript
           data: 'Vue challenge!',
+          ```
+      correct: b
+
+extending_singlefilecomponent:
+  question: |
+    Imagine our application has a `.vue` single file component that renders as
+    the page title. It has a `title` data member that it uses to render the
+    template.
+
+    Which one of these code snippets would compile correctly into such
+    component?
+  explanation: |
+    Correct! A vue single file component has at least 2 elements: a `<template>`
+    tag that holds the template in place, and a `<script>` tag that `export default`
+    one object with the rest of the options. Well done!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          <h1>{{ title }}</h1>
+
+          <script>
+          const component = {
+            name: 'TitleComponent',
+            data: {
+              title: '',
+            },
+          };
+          </script>
+          ```
+        b: |
+          ```vue
+          <template>
+            <h1>{{ title }}</h1>
+          </template>
+
+          <script>
+          const name = 'TitleComponent';
+          const data = {
+            title: ''
+          };
+          </script>
+          ```
+        c: |
+          ```vue
+          <template>
+            <h1>{{ title }}</h1>
+          </template>
+
+          <script>
+          const name = 'TitleComponent';
+          const data = function() {
+            return {
+              title: ''
+            };
+          };
+          </script>
+          ```
+        d: |
+          ```vue
+          <template>
+            <h1>{{ title }}</h1>
+          </template>
+
+          <script>
+          export default {
+            name: 'TitleComponent',
+            data() {
+              return { title: '' };
+            },
+          };
+          </script>
+          ```
+      correct: d
+
+extending_stylngacomponent:
+  question: |
+    What makes a `<style>` tag inside a `.vue` single file component modular?
+  explanation: |
+    That's right, the only thing you need to add to it in order to make it
+    modular is the `module` attribute! While a similar and valid option
+    would be `scoped`, this doesn't exactly compute into a "modular" style
+    system using webpack.
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          <style module>
+          </style>
+          ```
+        b: |
+          ```vue
+          <style lang="scss" module>
+          </style>
+          ```
+        c: |
+          ```vue
+          <style type="module">
+          </style>
+          ```
+        d: |
+          ```vue
+          <style scoped>
+          </style>
+          ```
+      correct: a
+
+extending_dataandvuedevtools:
+  question: |
+    Which of these is NOT a valid syntax to initialize a data object
+    in Vue?
+  explanation: |
+    That's right! Data can be just an `Object`, or a function *returning* an
+    `Object`! The option selected is proper syntax but it does NOT return
+    such `Object`.
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```javascript
+          data: {
+            legend: "My Legend Goes Here!",
+          },
+          ```
+        b: |
+          ```javascript
+          data: function() {
+            const legend = "My Legend Goes Here!;
+          },
+        c: |
+          ```javascript
+          data(): {
+            return {
+              legend: "My Legend Goes Here!",
+            };
+          },
+          ```
+        d: |
+          ```javascript
+          data: () => ({
+            legend: "My Legend Goes Here!",
+          }),
           ```
       correct: b
