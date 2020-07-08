@@ -181,3 +181,118 @@ extending_dataandvuedevtools:
           }),
           ```
       correct: b
+
+extending_childcomponent:
+  question: |
+    Which of these is NOT a general rule to consider breaking your components
+    into sub-components?
+  explanation: |
+    Correct! The 3 main reasons to consider splitting a component are:
+    - Encapsulating some special functionality
+    - The component can be reused in some other part of the application
+    - Extracing part of the logic to make it easier to understand
+  features:
+    multiple_choice:
+      choices:
+        a: A part of the component has a special functionality.
+        b: Part of the component needs to be reused in other parts of the application.
+        c: Extracing part of the component functionality will make its footprint smaller.
+        d: Extracting part of a template into a sub-component will make it easier to read and understand.
+      correct: c
+
+extending_childcomponent2:
+  question: |
+    Suppose we have a main component and we want to import a child component called
+    `TitleComponent` into it. Choose the option that would correctly import the component
+    and have it show in the main component's template! If the main component were just a
+    blank slate like:
+
+    ```vue
+    <template>
+      <div></div>
+    </template>
+
+    <script>
+    export default {
+      name: 'MainComponent',
+    };
+    </script>
+    ```
+
+    And the component you need to import is located at `@/components/title-component`,
+    what would the resulting code look like?
+  explanation: |
+    Correct! First, you need to import the file that holds the Vue component,
+    next, declare it in the Vue options object. This is achieved by creating an
+    `Object` with its properties set to the imported component. Third, make sure
+    you include it in the template!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          <template>
+            <div></div>
+          </template>
+
+          <script>
+          import { TitleComponent } from '@/components/title-component';
+
+          export default {
+            name: 'MainComponent',
+            components: {
+              TitleComponent,
+            },
+          };
+          </script>
+          ```
+        b: |
+          ```vue
+          <template>
+            <div><title-component /></div>
+          </template>
+
+          <script>
+          import { TitleComponent } from '@/components/title-component';
+
+          export default {
+            name: 'MainComponent',
+            components: {
+              TitleComponent,
+            },
+          };
+          </script>
+          ```
+        c: |
+          ```vue
+          <template>
+            <div><title-component /></div>
+          </template>
+
+          <script>
+          import { TitleComponent } from '@/components/title-component';
+
+          export default {
+            name: 'MainComponent',
+            components: [
+              TitleComponent,
+            ],
+          };
+          </script>
+          ```
+        d: |
+          ```vue
+          <template>
+            <div><title-component /></div>
+          </template>
+
+          <script>
+          export default {
+            name: 'MainComponent',
+            components: {
+              TitleComponent,
+            },
+          };
+          </script>
+          ```
+      correct: b
