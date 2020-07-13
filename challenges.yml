@@ -40,16 +40,15 @@ extending_instancedynamicdata:
 
 extending_singlefilecomponent:
   question: |
-    Imagine our application has a `.vue` single file component that renders as
-    the page title. It has a `title` data member that it uses to render the
+    Imagine you want to build a `.vue` single file component that renders a
+    page header. It needs to have a `title` data key that it uses to render the
     template.
 
-    Which one of these code snippets would compile correctly into such
-    component?
+    Which one of these code snippets would accomplish this?
   explanation: |
     Correct! A vue single file component has at least 2 elements: a `<template>`
-    tag that holds the template in place, and a `<script>` tag that `export default`
-    one object with the rest of the options. Well done!
+    tag that holds the template and a `<script>` tag that `export default`
+    one object with the rest of the options.
   features:
     multiple_choice:
       choices:
@@ -116,9 +115,9 @@ extending_dataandvuedevtools:
     Which of these is NOT a valid syntax to initialize a data object
     in Vue?
   explanation: |
-    That's right! Data can be just an `Object`, or a function *returning* an
-    `Object`! The option selected is proper syntax but it does NOT return
-    such `Object`.
+    That's right! Data can be just an `Object`, or (more commonly) a function
+    that *returns* an `Object`! Option "b" is proper syntax but doesn't return
+    anything!
   features:
     multiple_choice:
       choices:
@@ -151,28 +150,24 @@ extending_dataandvuedevtools:
 
 extending_childcomponent:
   question: |
-    Which of these is NOT a general rule to consider breaking your components
-    into sub-components?
+    Which of these is NOT a reason to consider breaking a component
+    into smaller sub-components?
   explanation: |
-    Correct! The 3 main reasons to consider splitting a component are:
-    - Encapsulating some special functionality
-    - The component can be reused in some other part of the application
-    - Extracing part of the logic to make it easier to understand
+    Correct! Splitting a component into smaller components can help you reuse code,
+    isolate complex logic, or make your templates smaller and more readable. But
+    this has no (significant) effect on the final size of your JavaScript code.
   features:
     multiple_choice:
       choices:
-        a: A part of the component has a special functionality.
+        a: Part of the component has a special functionality/logic.
         b: Part of the component needs to be reused in other parts of the application.
-        c: Extracing part of the component functionality will make its footprint smaller.
+        c: Extracting part of the component will make its footprint smaller.
         d: Extracting part of a template into a sub-component will make it easier to read and understand.
       correct: c
 
 extending_childcomponent2:
   question: |
-    Suppose we have a main component and we want to import a child component called
-    `TitleComponent` into it. Choose the option that would correctly import the component
-    and have it show in the main component's template! If the main component were just a
-    blank slate like:
+    Suppose we have an empty component that looks like this:
 
     ```vue
     <template>
@@ -184,15 +179,32 @@ extending_childcomponent2:
       name: 'MainComponent',
     };
     </script>
-    ```
 
-    And the component you need to import is located at `@/components/title-component`,
-    what would the resulting code look like?
+    We now want to import a child component (that lives at `@/components/title-component`)
+    and render it inside `MainComponent`. What code would accomplish this?
+    ```
   explanation: |
-    Correct! First, you need to import the file that holds the Vue component,
-    next, declare it in the Vue options object. This is achieved by creating an
-    `Object` with its properties set to the imported component. Third, make sure
-    you include it in the template!
+    Correct! First, you need to import the file that holds the Vue component
+    (like normal JavaScript). Next, the `components` option is an *object* containing
+    all of the components that you want to make *available* in the template. Once
+    you've made it available, you can *use* it in the template!
+
+    Fun fact: the reason `components` is an object is that you are *really* setting
+    a key-value pair of components to make available. For example:
+
+    ```
+    export default {
+      // ...
+      components: {
+          // this is short for TitleComponent: TitleComponent
+          TitleComponent,
+
+          // you won't do this, but it's legal to set any key to a component
+          // this would allow us to use <foo /> in the template to render the title
+          foo: TitleComponent
+      },
+    };
+    ```
   features:
     multiple_choice:
       choices:
@@ -203,7 +215,7 @@ extending_childcomponent2:
           </template>
 
           <script>
-          import { TitleComponent } from '@/components/title-component';
+          import TitleComponent from '@/components/title-component';
 
           export default {
             name: 'MainComponent',
@@ -220,7 +232,7 @@ extending_childcomponent2:
           </template>
 
           <script>
-          import { TitleComponent } from '@/components/title-component';
+          import TitleComponent from '@/components/title-component';
 
           export default {
             name: 'MainComponent',
@@ -237,7 +249,7 @@ extending_childcomponent2:
           </template>
 
           <script>
-          import { TitleComponent } from '@/components/title-component';
+          import TitleComponent from '@/components/title-component';
 
           export default {
             name: 'MainComponent',
@@ -266,7 +278,8 @@ extending_childcomponent2:
 
 extending_modularcss:
   question: |
-    What makes a `<style>` tag inside a `.vue` single file component modular?
+    What is the *minimum* code you need in a `<style>` tag (inside a `.vue`
+    single file component) to make it modular?
   explanation: |
     That's right, the only thing you need to add to it in order to make it
     modular is the `module` attribute! While a similar and valid option
