@@ -111,39 +111,6 @@ extending_singlefilecomponent:
           ```
       correct: d
 
-extending_stylngacomponent:
-  question: |
-    What makes a `<style>` tag inside a `.vue` single file component modular?
-  explanation: |
-    That's right, the only thing you need to add to it in order to make it
-    modular is the `module` attribute! While a similar and valid option
-    would be `scoped`, this doesn't exactly compute into a "modular" style
-    system using webpack.
-  features:
-    multiple_choice:
-      choices:
-        a: |
-          ```vue
-          <style module>
-          </style>
-          ```
-        b: |
-          ```vue
-          <style lang="scss" module>
-          </style>
-          ```
-        c: |
-          ```vue
-          <style type="module">
-          </style>
-          ```
-        d: |
-          ```vue
-          <style scoped>
-          </style>
-          ```
-      correct: a
-
 extending_dataandvuedevtools:
   question: |
     Which of these is NOT a valid syntax to initialize a data object
@@ -296,3 +263,36 @@ extending_childcomponent2:
           </script>
           ```
       correct: b
+
+extending_modularcss:
+  question: |
+    What makes a `<style>` tag inside a `.vue` single file component modular?
+  explanation: |
+    That's right, the only thing you need to add to it in order to make it
+    modular is the `module` attribute! While a similar and valid option
+    would be `scoped`, this doesn't exactly compute into a "modular" style
+    system using webpack.
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          <style module>
+          </style>
+          ```
+        b: |
+          ```vue
+          <style lang="scss" module>
+          </style>
+          ```
+        c: |
+          ```vue
+          <style type="module">
+          </style>
+          ```
+        d: |
+          ```vue
+          <style scoped>
+          </style>
+          ```
+      correct: a
