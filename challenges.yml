@@ -276,6 +276,224 @@ extending_childcomponent2:
           ```
       correct: b
 
+extnding_passinginfotochild:
+  question: |
+    Suppose we have a component that looks like this:
+
+    ```vue
+    <template>
+      <div>{{ title }}</div>
+    </template>
+
+    <script>
+    export default {
+      name: 'TitleComponent',
+    };
+    </script>
+    ```
+
+    And we want other components to be able to pass `title` as a prop to it.
+    Which of these options would be a valid way to define its `title` prop?
+  explanation: |
+    Correct! To define `props` for our component, we need to declare the
+    component `props` member. Its simplest form is to assign it to an array
+    of strings, where each string is a prop name!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          export default {
+            name: 'TitleComponent',
+            title: 'prop',
+          };
+          ```
+        b: |
+          ```vue
+          export default {
+            name: 'TitleComponent',
+            title: ['prop'],
+          };
+          ```
+        c: |
+          ```vue
+          export default {
+            name: 'TitleComponent',
+            props: 'title',
+          };
+          ```
+        d: |
+          ```vue
+          export default {
+            name: 'TitleComponent',
+            props: ['title'],
+          };
+          ```
+      correct: d
+
+extnding_passinginfotochild2:
+  question: |
+    Now, with the following component correctly configured like so:
+
+    ```vue
+    <template>
+      <div>{{ title }}</div>
+    </template>
+
+    <script>
+    export default {
+      name: 'TitleComponent',
+      props: ['title'],
+    };
+    </script>
+    ```
+
+    Let's imagine we want to pass the string `"This is a cool title"` to it
+    from a parent component. What would be a correct way to do this?
+  explanation: |
+    That's right! Props behave exactly like HTML attributes in Vue! The easiest
+    way to pass down a prop is to just declare it staticaly as an attribute.
+    In our next lesson, we explore the other way of passing a prop: Using the
+    `v-bind` directive, which allows us to use JavaScript for dynamic prop values!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          <template>
+            <title-component prop:title="This is a cool title"
+          </template>
+          ```
+        b: |
+          ```vue
+          <template>
+            <title-component title="This is a cool title"
+          </template>
+          ```
+        c: |
+          ```vue
+          <template>
+            <title-component title="'This is a cool title'"
+          </template>
+          ```
+        d: |
+          ```vue
+          <template>
+            <title-component title="javascript:return 'This is a cool title';"
+          </template>
+          ```
+      correct: b
+
+extending_dynamicattributes:
+  question: |
+    Now suppose we have this component imported and ready to use in our template:
+
+    ```vue
+    <template>
+      <div>{{ title }}</div>
+    </template>
+
+    <script>
+    export default {
+      name: 'TitleComponent',
+      props: ['title'],
+    };
+    </script>
+    ```
+
+    And we want to pass in the `title` prop with the value of an imaginary data
+    member called `ourTitle`. What would be the correct way of doing it in the
+    template using a shortcut syntax?
+  explanation: |
+    Correct! When using the shortcut syntax equivalent to `v-bind:title` we're
+    converting the attribute value into a JavaScript expression where we can
+    access all our objects props and data members directly. So doing
+    `:tite="ourTitle"` will work just fine!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          <template>
+            <title-component :title="ourTitle" />
+          </template>
+          ```
+        b: |
+          ```vue
+          <template>
+            <title-component title="{{ ourTitle }}" />
+          </template>
+          ```
+        c: |
+          ```vue
+          <template>
+            <title-component :title="{{ ourTitle }}" />
+          </template>
+          ```
+        d: |
+          ```vue
+          <template>
+            <title-component :title="'ourTitle'" />
+          </template>
+          ```
+      correct: a
+
+extending_dynamicattributes2:
+  question: |
+    Say we have a component with our prop `title` defined using the simple
+    syntax, but we'd like Vue to be able to do some validation for us when
+    the component is rendered. We'd like `title` to accept a String and to
+    be required. What would be the correct way to do it?
+  explanation: |
+    Correct! We NEED to pass an object whose members are equal to the names
+    of our defined props. Each member is in itself another object with the
+    options `type`, which can be equal to a JavaScript type object, like
+    `String` and `required` which is a boolean.
+
+    > When `required` is `false`, you can also define a `default` value using
+    > that option.
+
+    > Types are defined using JavaScript type classes, not its instantiated
+    > objects. That's why `String` works but `String()`, `''` or `new String()`
+    > will fail!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```javascript
+          props: {
+            title: {
+              type: String,
+              required,
+            },
+          },
+          ```
+        b: |
+          ```javascript
+          props: {
+            title: [String, true],
+          },
+          ```
+        c: |
+          ```javascript
+          props: {
+            title: {
+              type: String,
+              required: true,
+            },
+          },
+          ```
+        d: |
+          ```javascript
+          props: {
+            title: {
+              type: new String(),
+              required: true,
+            },
+          },
+          ```
+      correct: c
+
 extending_modularcss:
   question: |
     What is the *minimum* code you need in a `<style>` tag (inside a `.vue`
@@ -309,3 +527,46 @@ extending_modularcss:
           </style>
           ```
       correct: a
+
+extending_modularcss2:
+  question: |
+    Imagine we have a component with the following modular css:
+
+    ```vue
+    <style module>
+    .component {
+      background-color: red;
+    }
+    </style>
+
+    What would be the correct way of grabbing this style class from within our component
+    template?
+  explanation: |
+    You did it!
+
+    In order to access modular css, we *need* to use the Vue member `$style` using a v-bind
+    directive! Style is actually an object with each of its properties equaling our declared
+    style classes.
+
+    Each property then is mapped to whatever that class ends up being in the final
+    code!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          class="$style.computed"
+          ```
+        b: |
+          ```vue
+          :class="style.computed"
+          ```
+        c: |
+          ```vue
+          class="style.computed"
+          ```
+        d: |
+          ```vue
+          :class="$style.computed"
+          ```
+      correct: d
