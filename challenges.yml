@@ -349,7 +349,7 @@ extnding_passinginfotochild2:
     ```
 
     Let's imagine we want to pass the string `"This is a cool title"` to it
-    from a parent component. What would be a correct way to do this?
+    from a parent component. What would a correct way to do this be?
   explanation: |
     That's right! Props behave exactly like HTML attributes in Vue! The easiest
     way to pass down a prop is to just declare it staticaly as an attribute.
@@ -403,7 +403,7 @@ extending_dynamicattributes:
 
     And we want to pass in the `title` prop with the value of an imaginary data
     member called `ourTitle`. What would the correct way of doing it in the
-    template using a shortcut syntax be?
+    template be using a shortcut syntax?
   explanation: |
     Correct! When using the shortcut syntax equivalent to `v-bind:title` we're
     converting the attribute value into a JavaScript expression where we can
@@ -443,7 +443,7 @@ extending_dynamicattributes2:
     Say we have a component with our prop `title` defined using the simple
     syntax, but we'd like Vue to be able to do some validation for us when
     the component is rendered. We'd like `title` to accept a String and to
-    be required. What would be the correct way to do it?
+    be required. What would the correct way to do it be?
   explanation: |
     Correct! We NEED to pass an object whose members are equal to the names
     of our defined props. Each member is in itself another object with the
@@ -611,3 +611,67 @@ extending_aliases:
           })
           ```
       correct: b
+
+extending_vfor:
+  question: |
+    Suppose we have an imaginary component with the following data property:
+
+    ```javascript
+    data() {
+      return {
+        fruits: [
+          'Banana',
+          'Strawberry',
+          'Pienapple',
+          'Apple',
+        ],
+      };
+    },
+    ```
+
+    And we want to loop thrugh these fruits and show each of them in a `span`
+    element. What code would accomplish this in the best way?
+  explanation: |
+    That's correct! The `v-for` directive will produce copies of itself,
+    each one showing one element in the array you are looping through. The `:key`
+    attribute helps Vue make better updates should the contents of `fruit` change!
+
+    > Note you can also loop through Objects using this directive!
+    > `v-for="(value, key, index) in object"` will do it for you!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          <span
+            v-for="fruit in fruits"
+          >
+            {{ fruit }}
+          </span>
+          ```
+        b: |
+          ```vue
+          <div v-for="(fruit, index) in fruits">
+            <span
+              :key="index"
+            >
+              {{ fruit }}
+            </span>
+          </div>
+          ```
+        c: |
+          ```vue
+          <span
+            v-for="(fruit, index) in fruits"
+            :key="index"
+          >
+            {{ fruit }}
+          </span>
+          ```
+        d: |
+          ```vue
+          <span>
+            {{ fruits.reduce((fruit, acc) => { acc += 'fruit '; }, ''); }}
+          </span>
+          ```
+      correct: c
