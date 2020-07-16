@@ -112,7 +112,7 @@ extending_singlefilecomponent:
 
 extending_dataandvuedevtools:
   question: |
-    Which of these is NOT a valid syntax to initialize a data object
+    Which of these is NOT valid syntax to initialize a data object
     in Vue?
   explanation: |
     That's right! Data can be just an `Object`, or (more commonly) a function
@@ -179,10 +179,10 @@ extending_childcomponent2:
       name: 'MainComponent',
     };
     </script>
+    ```
 
     We now want to import a child component (that lives at `@/components/title-component`)
     and render it inside `MainComponent`. What code would accomplish this?
-    ```
   explanation: |
     Correct! First, you need to import the file that holds the Vue component
     (like normal JavaScript). Next, the `components` option is an *object* containing
@@ -296,7 +296,7 @@ extnding_passinginfotochild:
     Which of these options would be a valid way to define its `title` prop?
   explanation: |
     Correct! To define `props` for our component, we need to declare the
-    component `props` member. Its simplest form is to assign it to an array
+    component `props` property. Its simplest form is an array
     of strings, where each string is a prop name!
   features:
     multiple_choice:
@@ -402,12 +402,12 @@ extending_dynamicattributes:
     ```
 
     And we want to pass in the `title` prop with the value of an imaginary data
-    member called `ourTitle`. What would be the correct way of doing it in the
-    template using a shortcut syntax?
+    member called `ourTitle`. What would the correct way of doing it in the
+    template using a shortcut syntax be?
   explanation: |
     Correct! When using the shortcut syntax equivalent to `v-bind:title` we're
     converting the attribute value into a JavaScript expression where we can
-    access all our objects props and data members directly. So doing
+    access all our object's props and data members directly. So doing
     `:tite="ourTitle"` will work just fine!
   features:
     multiple_choice:
@@ -447,8 +447,8 @@ extending_dynamicattributes2:
   explanation: |
     Correct! We NEED to pass an object whose members are equal to the names
     of our defined props. Each member is in itself another object with the
-    options `type`, which can be equal to a JavaScript type object, like
-    `String` and `required` which is a boolean.
+    options `type` -which can be equal to a JavaScript type object, like
+    `String`- and `required` which is a boolean.
 
     > When `required` is `false`, you can also define a `default` value using
     > that option.
@@ -501,8 +501,8 @@ extending_modularcss:
   explanation: |
     That's right, the only thing you need to add to it in order to make it
     modular is the `module` attribute! While a similar and valid option
-    would be `scoped`, this doesn't exactly compute into a "modular" style
-    system using webpack.
+    would be `scoped` attribute, this doesn't exactly compute into a "modular"
+    style system using webpack.
   features:
     multiple_choice:
       choices:
@@ -538,9 +538,10 @@ extending_modularcss2:
       background-color: red;
     }
     </style>
+    ```
 
-    What would be the correct way of grabbing this style class from within our component
-    template?
+    What do we need to do in the template to grab this style class from
+    within our component template?
   explanation: |
     You did it!
 
@@ -555,18 +556,58 @@ extending_modularcss2:
       choices:
         a: |
           ```vue
-          class="$style.computed"
+          class="$style.component"
           ```
         b: |
           ```vue
-          :class="style.computed"
+          :class="style.component"
           ```
         c: |
           ```vue
-          class="style.computed"
+          class="style.component"
           ```
         d: |
           ```vue
-          :class="$style.computed"
+          :class="$style.component"
           ```
       correct: d
+
+extending_aliases:
+  question: |
+    Suppose we have a Vue application living inside our symfony project and
+    its components are located at `/assets/js/vue`. To follow Vue standards,
+    we want to be able to access this directory by just typing `@/...` in
+    our import statements.
+
+    What would the correct way of configuring this be?
+  explanation: |
+    Correct! `.addAliases` is a *function* that accepts an object where each
+    property is an alias, and its value, the path this alias points to.
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```javascript
+          .aliases({
+            '@': path.resolve(__dirname, 'assets/js/vue')
+          })
+          ```
+        b: |
+          ```javascript
+          .addAliases({
+            '@': path.resolve(__dirname, 'assets/js/vue')
+          })
+          ```
+        c: |
+          ```javascript
+          .aliases: {
+            '@': path.resolve(__dirname, 'assets/js/vue')
+          }
+          ```
+        d: |
+          ```javascript
+          .addAliases: () => ({
+            '@': path.resolve(__dirname, 'assets/js/vue')
+          })
+          ```
+      correct: b
