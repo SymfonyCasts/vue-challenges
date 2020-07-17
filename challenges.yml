@@ -810,3 +810,26 @@ extending_v-on3:
           };
           ```
       correct: b
+
+extending_reactivity:
+  question: |
+    Generally speaking, how does Vue go about making your `data` and `props` members
+    reactive?
+  explanation: |
+    That's right! Vue turns your `data` and `prop` members into getters and setters.
+    When those properties are complex objects, it even does this recursively! This means
+    and any time you access any of your data members to change it, for exampe, Vue will be
+    able to know that it needs to re-render your template!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          By running a scheduled task periodically in order to check for changes in the
+          data structure
+        b: |
+          By running a `setInterval` with a function that constantly re-renders your component
+        c: |
+          By turning all of your members into functions.
+        d: |
+          By turning all of your members into getters and setters.
+      correct: d
