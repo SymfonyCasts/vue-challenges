@@ -278,7 +278,7 @@ extending_childcomponent2:
 
 extnding_passinginfotochild:
   question: |
-    Suppose we have a component that looks like this:
+    Suppose we have a shiny Title component that looks like this:
 
     ```vue
     <template>
@@ -292,8 +292,8 @@ extnding_passinginfotochild:
     </script>
     ```
 
-    And we want other components to be able to pass `title` as a prop to it.
-    Which of these options would be a valid way to define its `title` prop?
+    We want other components to be able to pass a `title` to this component as a prop.
+    Which of option would be a valid way to define the `title` prop?
   explanation: |
     Correct! To define `props` for our component, we need to declare the
     component `props` property. Its simplest form is an array
@@ -333,7 +333,7 @@ extnding_passinginfotochild:
 
 extnding_passinginfotochild2:
   question: |
-    Now, with the following component correctly configured like so:
+    Ok! We now have a TitleComponent with a `title` prop:
 
     ```vue
     <template>
@@ -348,8 +348,8 @@ extnding_passinginfotochild2:
     </script>
     ```
 
-    Let's imagine we want to pass the string `"This is a cool title"` to it
-    from a parent component. What would a correct way to do this be?
+    Imagine that we want to pass the string `Discount Broken Furniture` to it
+    from a parent component. What's the correct way to do this?
   explanation: |
     That's right! Props behave exactly like HTML attributes in Vue! The easiest
     way to pass down a prop is to just declare it staticaly as an attribute.
@@ -361,32 +361,32 @@ extnding_passinginfotochild2:
         a: |
           ```vue
           <template>
-            <title-component prop:title="This is a cool title"
+            <title-component prop:title="Discount Broken Furniture"
           </template>
           ```
         b: |
           ```vue
           <template>
-            <title-component title="This is a cool title"
+            <title-component title="Discount Broken Furniture"
           </template>
           ```
         c: |
           ```vue
           <template>
-            <title-component title="'This is a cool title'"
+            <title-component title="'Discount Broken Furniture'"
           </template>
           ```
         d: |
           ```vue
           <template>
-            <title-component title="javascript:return 'This is a cool title';"
+            <title-component :title="Discount Broken Furniture"
           </template>
           ```
       correct: b
 
 extending_dynamicattributes:
   question: |
-    Now suppose we have this component imported and ready to use in our template:
+    Suppose we have this component imported and ready to use in our template:
 
     ```vue
     <template>
@@ -402,60 +402,66 @@ extending_dynamicattributes:
     ```
 
     And we want to pass in the `title` prop with the value of an imaginary data
-    member called `ourTitle`. What would the correct way of doing it in the
+    key called `categoryName`. What would the correct way of doing it in the
     template be using a shortcut syntax?
   explanation: |
-    Correct! When using the shortcut syntax equivalent to `v-bind:title` we're
+    Correct! When using the shortcut syntax - equivalent to `v-bind:title` - we're
     converting the attribute value into a JavaScript expression where we can
     access all our object's props and data members directly. So doing
-    `:tite="ourTitle"` will work just fine!
+    `:title="ourTitle"` will work just fine!
   features:
     multiple_choice:
       choices:
         a: |
           ```vue
           <template>
-            <title-component :title="ourTitle" />
+            <title-component :title="categoryName" />
           </template>
           ```
         b: |
           ```vue
           <template>
-            <title-component title="{{ ourTitle }}" />
+            <title-component title="{{ categoryName }}" />
           </template>
           ```
         c: |
           ```vue
           <template>
-            <title-component :title="{{ ourTitle }}" />
+            <title-component :title="{{ categoryName }}" />
           </template>
           ```
         d: |
           ```vue
           <template>
-            <title-component :title="'ourTitle'" />
+            <title-component :title="'categoryName'" />
           </template>
           ```
       correct: a
 
 extending_dynamicattributes2:
   question: |
-    Say we have a component with our prop `title` defined using the simple
-    syntax, but we'd like Vue to be able to do some validation for us when
-    the component is rendered. We'd like `title` to accept a String and to
-    be required. What would the correct way to do it be?
+    Say we have a component with a prop `title` defined using the simple
+    syntax:
+
+    ```javascript
+    props: [title],
+    ```
+
+    But now, we'd like Vue to be able to do some validation for us when
+    the component is rendered: we want `title` to accept a String and to
+    be required. How can we do this?
   explanation: |
     Correct! We NEED to pass an object whose members are equal to the names
-    of our defined props. Each member is in itself another object with the
-    options `type` -which can be equal to a JavaScript type object, like
-    `String`- and `required` which is a boolean.
+    of our defined props. Each member is  itself another object with the
+    options `type` - which can be equal to a JavaScript type object, like
+    `String` - and `required` which is a boolean.
 
     > When `required` is `false`, you can also define a `default` value using
     > that option.
 
     > Types are defined using JavaScript type classes, not its instantiated
-    > objects. That's why `String` works but `String()`, `''` or `new String()`
-    > will fail!
+    > objects. That's why `String` works but `String()`, `'String'`, `''`, or
+    > `new String()` will fail!
   features:
     multiple_choice:
       choices:
@@ -541,15 +547,15 @@ extending_modularcss2:
     ```
 
     What do we need to do in the template to grab this style class from
-    within our component template?
+    inside our component template?
   explanation: |
     You did it!
 
-    In order to access modular css, we *need* to use the Vue member `$style` using a v-bind
-    directive! Style is actually an object with each of its properties equaling our declared
-    style classes.
+    In order to access modular css, we *need* to use the `$style` variable using a v-bind
+    directive! Style is actually an object with a property for every class defined
+    in `<style>`.
 
-    Each property then is mapped to whatever that class ends up being in the final
+    Each property is mapped to whatever that class ends up being in the final
     code!
   features:
     multiple_choice:
@@ -574,15 +580,15 @@ extending_modularcss2:
 
 extending_aliases:
   question: |
-    Suppose we have a Vue application living inside our symfony project and
+    Suppose we have a Vue application living inside our Symfony project and
     its components are located at `/assets/js/vue`. To follow Vue standards,
     we want to be able to access this directory by just typing `@/...` in
     our import statements.
 
-    What would the correct way of configuring this be?
+    How can we do this?
   explanation: |
-    Correct! `.addAliases` is a *function* that accepts an object where each
-    property is an alias, and its value, the path this alias points to.
+    Correct! `.addAliases()` is a *function* that accepts an object where each
+    property is an alias and its value is the path the alias points to.
   features:
     multiple_choice:
       choices:
@@ -629,15 +635,15 @@ extending_vfor:
     },
     ```
 
-    And we want to loop thrugh these fruits and show each of them in a `span`
-    element. What code would accomplish this in the best way?
+    Delicious! Now e want to loop through these fruits and show each of them in a `span`
+    element. What's the best way to accomplish this?
   explanation: |
     That's correct! The `v-for` directive will produce copies of itself,
-    each one showing one element in the array you are looping through. The `:key`
-    attribute helps Vue make better updates should the contents of `fruit` change!
+    each rendering one element in the array that you are looping through. The `:key`
+    attribute helps Vue make better updates if the contents of `fruit` change!
 
     > Note you can also loop through Objects using this directive!
-    > `v-for="(value, key, index) in object"` will do it for you!
+    > `v-for="(value, key, index) in object"` will do it!
   features:
     multiple_choice:
       choices:
@@ -721,7 +727,7 @@ extending_v-on:
 
 extending_v-on2:
   question: |
-    Say we have a component with the data member `myText` set to a text string.
+    Say we have a component with the data key `promoText` set to a string.
     Which one of these examples of a template will NOT render a single text node
     inside the `span` element?
   explanation: |
@@ -761,11 +767,12 @@ extending_v-on3:
     <button @click="onFormSubmit">Submit form!</button>
     ```
 
-    And we want to log to the console that we've clicked the button. Which one of
-    these code samples will accomplish this?
+    How could we print `Form submit button clicked!` to the console each time
+    this button is clicked?
   explanation: |
-    That's right! A method inside your component's `methods` option is what you need
-    in order to do stuff on DOM events!
+    That's right! On click, Vue will effectively call `this.onFormSubmit()`
+    and adding a key inside your component's `methods` option is the way to
+    add methods to your Vue instance.
   features:
     multiple_choice:
       choices:
@@ -814,20 +821,26 @@ extending_v-on3:
 extending_reactivity:
   question: |
     Generally speaking, how does Vue go about making your `data` and `props` members
-    reactive?
+    reactive? In other words: how is Vue smart enough to re-render components
+    when `data` or `props` change?
   explanation: |
-    That's right! Vue turns your `data` and `prop` members into getters and setters.
-    When those properties are complex objects, it even does this recursively! This means
-    and any time you access any of your data members to change it, for exampe, Vue will be
-    able to know that it needs to re-render your template!
+    That's right! Vue turns your `data` and `prop` members into getter and setter functions.
+    When those properties are complex objects, it even does this recursively!
+    When you access a key in `data` or `props`, Vue uses the getter to keep an
+    internal list of all components thta *use* that key. And when you *set*
+    a key on `data`, Vue is then able to notify all components that use that key.
+    *Then* those components can re-render.
+
+    Pretty cool, eh?
   features:
     multiple_choice:
       choices:
         a: |
           By running a scheduled task periodically in order to check for changes in the
-          data structure
+          data structure of `data` and `props`.
         b: |
-          By running a `setInterval` with a function that constantly re-renders your component
+          By running `setInterval()` with a function that constantly re-renders your component.
+          Because of the virtual DOM, this re-rendering is very efficient.
         c: |
           By turning all of your members into functions.
         d: |
