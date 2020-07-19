@@ -112,7 +112,7 @@ extending_singlefilecomponent:
 
 extending_dataandvuedevtools:
   question: |
-    Which of these is NOT a valid syntax to initialize a data object
+    Which of these is NOT valid syntax to initialize a data object
     in Vue?
   explanation: |
     That's right! Data can be just an `Object`, or (more commonly) a function
@@ -179,10 +179,10 @@ extending_childcomponent2:
       name: 'MainComponent',
     };
     </script>
+    ```
 
     We now want to import a child component (that lives at `@/components/title-component`)
     and render it inside `MainComponent`. What code would accomplish this?
-    ```
   explanation: |
     Correct! First, you need to import the file that holds the Vue component
     (like normal JavaScript). Next, the `components` option is an *object* containing
@@ -276,6 +276,224 @@ extending_childcomponent2:
           ```
       correct: b
 
+extnding_passinginfotochild:
+  question: |
+    Suppose we have a component that looks like this:
+
+    ```vue
+    <template>
+      <div>{{ title }}</div>
+    </template>
+
+    <script>
+    export default {
+      name: 'TitleComponent',
+    };
+    </script>
+    ```
+
+    And we want other components to be able to pass `title` as a prop to it.
+    Which of these options would be a valid way to define its `title` prop?
+  explanation: |
+    Correct! To define `props` for our component, we need to declare the
+    component `props` property. Its simplest form is an array
+    of strings, where each string is a prop name!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          export default {
+            name: 'TitleComponent',
+            title: 'prop',
+          };
+          ```
+        b: |
+          ```vue
+          export default {
+            name: 'TitleComponent',
+            title: ['prop'],
+          };
+          ```
+        c: |
+          ```vue
+          export default {
+            name: 'TitleComponent',
+            props: 'title',
+          };
+          ```
+        d: |
+          ```vue
+          export default {
+            name: 'TitleComponent',
+            props: ['title'],
+          };
+          ```
+      correct: d
+
+extnding_passinginfotochild2:
+  question: |
+    Now, with the following component correctly configured like so:
+
+    ```vue
+    <template>
+      <div>{{ title }}</div>
+    </template>
+
+    <script>
+    export default {
+      name: 'TitleComponent',
+      props: ['title'],
+    };
+    </script>
+    ```
+
+    Let's imagine we want to pass the string `"This is a cool title"` to it
+    from a parent component. What would a correct way to do this be?
+  explanation: |
+    That's right! Props behave exactly like HTML attributes in Vue! The easiest
+    way to pass down a prop is to just declare it staticaly as an attribute.
+    In our next lesson, we explore the other way of passing a prop: Using the
+    `v-bind` directive, which allows us to use JavaScript for dynamic prop values!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          <template>
+            <title-component prop:title="This is a cool title"
+          </template>
+          ```
+        b: |
+          ```vue
+          <template>
+            <title-component title="This is a cool title"
+          </template>
+          ```
+        c: |
+          ```vue
+          <template>
+            <title-component title="'This is a cool title'"
+          </template>
+          ```
+        d: |
+          ```vue
+          <template>
+            <title-component title="javascript:return 'This is a cool title';"
+          </template>
+          ```
+      correct: b
+
+extending_dynamicattributes:
+  question: |
+    Now suppose we have this component imported and ready to use in our template:
+
+    ```vue
+    <template>
+      <div>{{ title }}</div>
+    </template>
+
+    <script>
+    export default {
+      name: 'TitleComponent',
+      props: ['title'],
+    };
+    </script>
+    ```
+
+    And we want to pass in the `title` prop with the value of an imaginary data
+    member called `ourTitle`. What would the correct way of doing it in the
+    template be using a shortcut syntax?
+  explanation: |
+    Correct! When using the shortcut syntax equivalent to `v-bind:title` we're
+    converting the attribute value into a JavaScript expression where we can
+    access all our object's props and data members directly. So doing
+    `:tite="ourTitle"` will work just fine!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          <template>
+            <title-component :title="ourTitle" />
+          </template>
+          ```
+        b: |
+          ```vue
+          <template>
+            <title-component title="{{ ourTitle }}" />
+          </template>
+          ```
+        c: |
+          ```vue
+          <template>
+            <title-component :title="{{ ourTitle }}" />
+          </template>
+          ```
+        d: |
+          ```vue
+          <template>
+            <title-component :title="'ourTitle'" />
+          </template>
+          ```
+      correct: a
+
+extending_dynamicattributes2:
+  question: |
+    Say we have a component with our prop `title` defined using the simple
+    syntax, but we'd like Vue to be able to do some validation for us when
+    the component is rendered. We'd like `title` to accept a String and to
+    be required. What would the correct way to do it be?
+  explanation: |
+    Correct! We NEED to pass an object whose members are equal to the names
+    of our defined props. Each member is in itself another object with the
+    options `type` -which can be equal to a JavaScript type object, like
+    `String`- and `required` which is a boolean.
+
+    > When `required` is `false`, you can also define a `default` value using
+    > that option.
+
+    > Types are defined using JavaScript type classes, not its instantiated
+    > objects. That's why `String` works but `String()`, `''` or `new String()`
+    > will fail!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```javascript
+          props: {
+            title: {
+              type: String,
+              required,
+            },
+          },
+          ```
+        b: |
+          ```javascript
+          props: {
+            title: [String, true],
+          },
+          ```
+        c: |
+          ```javascript
+          props: {
+            title: {
+              type: String,
+              required: true,
+            },
+          },
+          ```
+        d: |
+          ```javascript
+          props: {
+            title: {
+              type: new String(),
+              required: true,
+            },
+          },
+          ```
+      correct: c
+
 extending_modularcss:
   question: |
     What is the *minimum* code you need in a `<style>` tag (inside a `.vue`
@@ -283,8 +501,8 @@ extending_modularcss:
   explanation: |
     That's right, the only thing you need to add to it in order to make it
     modular is the `module` attribute! While a similar and valid option
-    would be `scoped`, this doesn't exactly compute into a "modular" style
-    system using webpack.
+    would be `scoped` attribute, this doesn't exactly compute into a "modular"
+    style system using webpack.
   features:
     multiple_choice:
       choices:
@@ -309,3 +527,309 @@ extending_modularcss:
           </style>
           ```
       correct: a
+
+extending_modularcss2:
+  question: |
+    Imagine we have a component with the following modular css:
+
+    ```vue
+    <style module>
+    .component {
+      background-color: red;
+    }
+    </style>
+    ```
+
+    What do we need to do in the template to grab this style class from
+    within our component template?
+  explanation: |
+    You did it!
+
+    In order to access modular css, we *need* to use the Vue member `$style` using a v-bind
+    directive! Style is actually an object with each of its properties equaling our declared
+    style classes.
+
+    Each property then is mapped to whatever that class ends up being in the final
+    code!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          class="$style.component"
+          ```
+        b: |
+          ```vue
+          :class="style.component"
+          ```
+        c: |
+          ```vue
+          class="style.component"
+          ```
+        d: |
+          ```vue
+          :class="$style.component"
+          ```
+      correct: d
+
+extending_aliases:
+  question: |
+    Suppose we have a Vue application living inside our symfony project and
+    its components are located at `/assets/js/vue`. To follow Vue standards,
+    we want to be able to access this directory by just typing `@/...` in
+    our import statements.
+
+    What would the correct way of configuring this be?
+  explanation: |
+    Correct! `.addAliases` is a *function* that accepts an object where each
+    property is an alias, and its value, the path this alias points to.
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```javascript
+          .aliases({
+            '@': path.resolve(__dirname, 'assets/js/vue')
+          })
+          ```
+        b: |
+          ```javascript
+          .addAliases({
+            '@': path.resolve(__dirname, 'assets/js/vue')
+          })
+          ```
+        c: |
+          ```javascript
+          .aliases: {
+            '@': path.resolve(__dirname, 'assets/js/vue')
+          }
+          ```
+        d: |
+          ```javascript
+          .addAliases: () => ({
+            '@': path.resolve(__dirname, 'assets/js/vue')
+          })
+          ```
+      correct: b
+
+extending_vfor:
+  question: |
+    Suppose we have an imaginary component with the following data property:
+
+    ```javascript
+    data() {
+      return {
+        fruits: [
+          'Banana',
+          'Strawberry',
+          'Pienapple',
+          'Apple',
+        ],
+      };
+    },
+    ```
+
+    And we want to loop thrugh these fruits and show each of them in a `span`
+    element. What code would accomplish this in the best way?
+  explanation: |
+    That's correct! The `v-for` directive will produce copies of itself,
+    each one showing one element in the array you are looping through. The `:key`
+    attribute helps Vue make better updates should the contents of `fruit` change!
+
+    > Note you can also loop through Objects using this directive!
+    > `v-for="(value, key, index) in object"` will do it for you!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          <span
+            v-for="fruit in fruits"
+          >
+            {{ fruit }}
+          </span>
+          ```
+        b: |
+          ```vue
+          <div v-for="(fruit, index) in fruits">
+            <span
+              :key="index"
+            >
+              {{ fruit }}
+            </span>
+          </div>
+          ```
+        c: |
+          ```vue
+          <span
+            v-for="(fruit, index) in fruits"
+            :key="index"
+          >
+            {{ fruit }}
+          </span>
+          ```
+        d: |
+          ```vue
+          <span>
+            {{ fruits.reduce((fruit, acc) => { acc += 'fruit '; }, ''); }}
+          </span>
+          ```
+      correct: c
+
+extending_v-on:
+  question: |
+    Let's imagine we have these two boolean variables: `collapsed` and `darkMode`
+    and we want to change the width and color of an element based on the
+    state of these. What is the correct way to accomplish this using a `style`
+    attribute?
+  explanation: |
+    Correct! the `:style` special attribute accepts an object where you can make
+    each of its properties correspond to a style rule. Then have its value be
+    the result of any JavaScript expression!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          :style="{
+            width: collapsed ? '70px' : 'auto',
+            color: darkMode ? 'white' : 'black',
+            backgroundColor: darkMode ? 'black' : 'white',
+          }"
+          ```
+        b: |
+          ```vue
+          :style="[
+            { width: collapsed ? '70px' : 'auto' },
+            { color: darkMode ? 'white' : 'black' },
+            { backgroundColor: darkMode ? 'black' : 'white' },
+          ]"
+          ```
+        c: |
+          ```vue
+          :style="`width: ${collapsed ? '70px' : 'auto'}; color: ${darkMode ? 'white' : 'black'}; backgroundColor: ${darkMode ? 'black' : 'white'}`"
+          ```
+        d: |
+          ```vue
+          style="{
+            width: collapsed ? '70px' : 'auto',
+            color: darkMode ? 'white' : 'black'
+            backgroundColor: darkMode ? 'black' : 'white',
+          }"
+          ```
+      correct: a
+
+extending_v-on2:
+  question: |
+    Say we have a component with the data member `myText` set to a text string.
+    Which one of these examples of a template will NOT render a single text node
+    inside the `span` element?
+  explanation: |
+    That's right! A `v-text` directive present in an element will *ignore* any child
+    elements you might add!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          <span>{{ myText }}</span>
+          ```
+        b: |
+          ```vue
+          <span v-text="myText" />
+          ```
+        c: |
+          ```vue
+          <span v-text="myText">
+            <h1>Some other stuff!</h1>
+          </span>
+          ```
+        d: |
+          ```vue
+          <span>
+            {{ myText }}
+            <h1>Some other stuff!</h1>
+          </span>
+          ```
+      correct: d
+
+extending_v-on3:
+  question: |
+    Suppose we have a component where an element of its template looks like this:
+
+    ```vue
+    <button @click="onFormSubmit">Submit form!</button>
+    ```
+
+    And we want to log to the console that we've clicked the button. Which one of
+    these code samples will accomplish this?
+  explanation: |
+    That's right! A method inside your component's `methods` option is what you need
+    in order to do stuff on DOM events!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```javascript
+          export default {
+            methods() {
+              const onFormSubmit = function() {
+                console.log('Form submit button clicked!');
+              };
+
+              return onFormSubmit;
+            }
+          };
+          ```
+        b: |
+          ```javascript
+          export default {
+            methods: {
+              onFormSubmit() {
+                console.log('Form submit button clicked!');
+              },
+            },
+          };
+          ```
+        c: |
+          ```javascript
+          export default {
+            computed: {
+              onFormSubmit() {
+                console.log('Form submit button clicked!');
+              },
+            },
+          };
+          ```
+        d: |
+          ```javascript
+          export default {
+            onFormSubmit() {
+              console.log('Form submit button clicked!');
+            },
+          };
+          ```
+      correct: b
+
+extending_reactivity:
+  question: |
+    Generally speaking, how does Vue go about making your `data` and `props` members
+    reactive?
+  explanation: |
+    That's right! Vue turns your `data` and `prop` members into getters and setters.
+    When those properties are complex objects, it even does this recursively! This means
+    and any time you access any of your data members to change it, for exampe, Vue will be
+    able to know that it needs to re-render your template!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          By running a scheduled task periodically in order to check for changes in the
+          data structure
+        b: |
+          By running a `setInterval` with a function that constantly re-renders your component
+        c: |
+          By turning all of your members into functions.
+        d: |
+          By turning all of your members into getters and setters.
+      correct: d
