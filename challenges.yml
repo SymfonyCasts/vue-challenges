@@ -339,23 +339,10 @@ extnding_passinginfotochild:
 
 extnding_passinginfotochild2:
   question: |
-    Ok! We now have a TitleComponent with a `title` prop:
-
-    ```vue
-    <template>
-        <div>{{ title }}</div>
-    </template>
-
-    <script>
-    export default {
-        name: 'TitleComponent',
-        props: ['title'],
-    };
-    </script>
-    ```
+    Ok! Say we have a TitleComponent that accepts a `title` prop.
 
     Imagine that we want to pass the string `Discount Broken Furniture` to it
-    from a parent component. What's the correct way to do this?
+    from a parent component. What's the correct way to do this in a template?
   explanation: |
     That's right! Props behave exactly like HTML attributes in Vue! The easiest
     way to pass down a prop is to just declare it staticaly as an attribute.
@@ -392,24 +379,32 @@ extnding_passinginfotochild2:
 
 extending_dynamicattributes:
   question: |
-    Suppose we have this component imported and ready to use in our template:
+    Suppose we have a component named `TitleComponent` that is ready to be
+    used. This component accepts a `title` prop and we want to populate it with
+    the value of an imaginary data key called `categoryName` like this:
 
-    ```vue
     <template>
-        <div>{{ title }}</div>
+        <title-component />
     </template>
 
     <script>
+    import TitleComponent from '@/components/title-component';
+
     export default {
-        name: 'TitleComponent',
-        props: ['title'],
+        name: 'MainComponent',
+        components: {
+          TitleComponent
+        },
+        data() {
+          return {
+            categoryName: 'Cars',
+          }
+        },
     };
     </script>
-    ```
 
-    And we want to pass in the `title` prop with the value of an imaginary data
-    key called `categoryName`. What would the correct way of doing it in the
-    template be using a shortcut syntax?
+    How would you pass this value on to a property of `title-component`
+    using a shortcut syntax?
   explanation: |
     Correct! When using the shortcut syntax - equivalent to `v-bind:title` - we're
     converting the attribute value into a JavaScript expression where we can
@@ -450,7 +445,7 @@ extending_dynamicattributes2:
     syntax:
 
     ```javascript
-    props: [title],
+    props: ['title'],
     ```
 
     But now, we'd like Vue to be able to do some validation for us when
@@ -586,42 +581,30 @@ extending_modularcss2:
 
 extending_aliases:
   question: |
-    Suppose we have a Vue application living inside our Symfony project and
-    its components are located at `/assets/js/vue`. To follow Vue standards,
-    we want to be able to access this directory by just typing `@/...` in
-    our import statements.
+    Suppose you have this code:
 
-    How can we do this?
+    ```javascript
+    import Legend from '@/components/legend';
+    ```
+
+    When you run the code, this successfully loads the
+    `/assets/js/vue/components/legend.vue` file. How does this work?
   explanation: |
-    Correct! `.addAliases()` is a *function* that accepts an object where each
-    property is an alias and its value is the path the alias points to.
+    Correct! We use `.addAliases()` in Webpack Encore to easily configure
+    Webpack aliases for our project. In Vue, having the `@` alias set to the
+    project's root directory is common practice!
   features:
     multiple_choice:
       choices:
         a: |
-          ```javascript
-          .aliases({
-              '@': path.resolve(__dirname, 'assets/js/vue')
-          })
-          ```
+          Vue adds a shortcut where the `@` symbol resolves to the root directory
+          where the top level component is created (e.g. `assets/js/vue`).
         b: |
-          ```javascript
-          .addAliases({
-              '@': path.resolve(__dirname, 'assets/js/vue')
-          })
-          ```
+          In Webpack, the `@` symbol gets you to the root of the "entry" file.
         c: |
-          ```javascript
-          .aliases: {
-              '@': path.resolve(__dirname, 'assets/js/vue')
-          }
-          ```
+          The project must have a Webpack Alias for `@` configured.
         d: |
-          ```javascript
-          .addAliases: () => ({
-              '@': path.resolve(__dirname, 'assets/js/vue')
-          })
-          ```
+          This project must have a Vue "directory root" set for the `@` symbol.
       correct: b
 
 extending_vfor:
@@ -649,7 +632,11 @@ extending_vfor:
     attribute helps Vue make better updates if the contents of `fruit` change!
 
     > Note you can also loop through Objects using this directive!
-    > `v-for="(value, key, index) in object"` will do it!
+    > `v-for="(value, key) in object"` will do it!
+
+    > If you are iterating through an Object and *still* need to get an index
+    > number, you can use the syntax:
+    > `v-for="(value, key, index) in object"`
   features:
     multiple_choice:
       choices:
@@ -733,9 +720,16 @@ extending_v-on:
 
 extending_v-on2:
   question: |
-    Say we have a component with the data key `promoText` set to a string.
-    Which one of these examples of a template will NOT render a single text node
-    inside the `span` element?
+    Suppose you have a `promoText` data set to `Office chairs now have 33% less wheels`.
+    In a template, you have this:
+
+    ```vue
+    <span v-text="promoText">
+      <span>... and more text</span>
+    </span>
+    ```
+
+    What will this template print?
   explanation: |
     That's right! A `v-text` directive present in an element will *ignore* any child
     elements you might add!
@@ -743,24 +737,29 @@ extending_v-on2:
     multiple_choice:
       choices:
         a: |
-          ```vue
-          <span>{{ myText }}</span>
+          ```html
+          <span text="Office chairs now have 33% less wheels">
+              <span>... and more text</span>
+          </span>
           ```
         b: |
-          ```vue
-          <span v-text="myText" />
+          ```html
+          <span>
+              Office chairs now have 33% less wheels
+              <span>... and more text</span>
+          </span>
           ```
         c: |
-          ```vue
-          <span v-text="myText">
-              <h1>Some other stuff!</h1>
+          ```html
+          <span>
+              <span>Office chairs now have 33% less wheels</span>
+              <span>... and more text</span>
           </span>
           ```
         d: |
-          ```vue
+          ```html
           <span>
-              {{ myText }}
-              <h1>Some other stuff!</h1>
+              Office chairs now have 33% less wheels
           </span>
           ```
       correct: d
