@@ -4,8 +4,8 @@ extending_instancedynamicdata:
 
     ```javascript
     const app = new Vue({
-      el: '#app',
-      template: '<span class="title">{{ title }}</span>
+        el: '#app',
+        template: '<span class="title">{{ title }}</span>
     });
     ```
 
@@ -58,53 +58,53 @@ extending_singlefilecomponent:
 
           <script>
           const component = {
-            name: 'TitleComponent',
-            data: {
-              title: '',
-            },
+              name: 'TitleComponent',
+              data: {
+                  title: '',
+              },
           };
           </script>
           ```
         b: |
           ```vue
           <template>
-            <h1>{{ title }}</h1>
+              <h1>{{ title }}</h1>
           </template>
 
           <script>
           const name = 'TitleComponent';
           const data = {
-            title: ''
+              title: ''
           };
           </script>
           ```
         c: |
           ```vue
           <template>
-            <h1>{{ title }}</h1>
+              <h1>{{ title }}</h1>
           </template>
 
           <script>
           const name = 'TitleComponent';
           const data = function() {
-            return {
-              title: ''
-            };
+              return {
+                  title: ''
+              };
           };
           </script>
           ```
         d: |
           ```vue
           <template>
-            <h1>{{ title }}</h1>
+              <h1>{{ title }}</h1>
           </template>
 
           <script>
           export default {
-            name: 'TitleComponent',
-            data() {
-              return { title: '' };
-            },
+              name: 'TitleComponent',
+              data() {
+                  return { title: '' };
+              },
           };
           </script>
           ```
@@ -124,26 +124,26 @@ extending_dataandvuedevtools:
         a: |
           ```javascript
           data: {
-            legend: "My Legend Goes Here!",
+              legend: "My Legend Goes Here!",
           },
           ```
         b: |
           ```javascript
           data: function() {
-            const legend = "My Legend Goes Here!;
+              const legend = "My Legend Goes Here!;
           },
         c: |
           ```javascript
           data(): {
-            return {
-              legend: "My Legend Goes Here!",
-            };
+              return {
+                legend: "My Legend Goes Here!",
+              };
           },
           ```
         d: |
           ```javascript
           data: () => ({
-            legend: "My Legend Goes Here!",
+              legend: "My Legend Goes Here!",
           }),
           ```
       correct: b
@@ -171,12 +171,12 @@ extending_childcomponent2:
 
     ```vue
     <template>
-      <div></div>
+        <div></div>
     </template>
 
     <script>
     export default {
-      name: 'MainComponent',
+        name: 'MainComponent',
     };
     </script>
     ```
@@ -194,15 +194,15 @@ extending_childcomponent2:
 
     ```
     export default {
-      // ...
-      components: {
-          // this is short for TitleComponent: TitleComponent
-          TitleComponent,
+        // ...
+        components: {
+            // this is short for TitleComponent: TitleComponent
+            TitleComponent,
 
-          // you won't do this, but it's legal to set any key to a component
-          // this would allow us to use <foo /> in the template to render the title
-          foo: TitleComponent
-      },
+            // you won't do this, but it's legal to set any key to a component
+            // this would allow us to use <foo /> in the template to render the title
+            foo: TitleComponent
+        },
     };
     ```
   features:
@@ -211,66 +211,66 @@ extending_childcomponent2:
         a: |
           ```vue
           <template>
-            <div></div>
+              <div></div>
           </template>
 
           <script>
           import TitleComponent from '@/components/title-component';
 
           export default {
-            name: 'MainComponent',
-            components: {
-              TitleComponent,
-            },
+              name: 'MainComponent',
+              components: {
+                  TitleComponent,
+              },
           };
           </script>
           ```
         b: |
           ```vue
           <template>
-            <div><title-component /></div>
+              <div><title-component /></div>
           </template>
 
           <script>
           import TitleComponent from '@/components/title-component';
 
           export default {
-            name: 'MainComponent',
-            components: {
-              TitleComponent,
-            },
+              name: 'MainComponent',
+              components: {
+                  TitleComponent,
+              },
           };
           </script>
           ```
         c: |
           ```vue
           <template>
-            <div><title-component /></div>
+              <div><title-component /></div>
           </template>
 
           <script>
           import TitleComponent from '@/components/title-component';
 
           export default {
-            name: 'MainComponent',
-            components: [
-              TitleComponent,
-            ],
+              name: 'MainComponent',
+              components: [
+                  TitleComponent,
+              ],
           };
           </script>
           ```
         d: |
           ```vue
           <template>
-            <div><title-component /></div>
+              <div><title-component /></div>
           </template>
 
           <script>
           export default {
-            name: 'MainComponent',
-            components: {
-              TitleComponent,
-            },
+              name: 'MainComponent',
+              components: {
+                  TitleComponent,
+              },
           };
           </script>
           ```
@@ -282,18 +282,18 @@ extnding_passinginfotochild:
 
     ```vue
     <template>
-      <div>{{ title }}</div>
+        <div>{{ title }}</div>
     </template>
 
     <script>
     export default {
-      name: 'TitleComponent',
+        name: 'TitleComponent',
     };
     </script>
     ```
 
     We want other components to be able to pass a `title` to this component as a prop.
-    Which of option would be a valid way to define the `title` prop?
+    Which option would NOT be a valid way to define the `title` prop?
   explanation: |
     Correct! To define `props` for our component, we need to declare the
     component `props` property. Its simplest form is an array
@@ -304,29 +304,35 @@ extnding_passinginfotochild:
         a: |
           ```vue
           export default {
-            name: 'TitleComponent',
-            title: 'prop',
+              name: 'TitleComponent',
+              props: ['title'],
           };
           ```
         b: |
           ```vue
           export default {
-            name: 'TitleComponent',
-            title: ['prop'],
+              name: 'TitleComponent',
+              props: {
+                  title: String,
+              },
           };
           ```
         c: |
           ```vue
           export default {
-            name: 'TitleComponent',
-            props: 'title',
+              name: 'TitleComponent',
+              props: {
+                  title: {
+                      type: String,
+                  },
+              },
           };
           ```
         d: |
           ```vue
           export default {
-            name: 'TitleComponent',
-            props: ['title'],
+              name: 'TitleComponent',
+              props: { 'title' : true },
           };
           ```
       correct: d
@@ -337,13 +343,13 @@ extnding_passinginfotochild2:
 
     ```vue
     <template>
-      <div>{{ title }}</div>
+        <div>{{ title }}</div>
     </template>
 
     <script>
     export default {
-      name: 'TitleComponent',
-      props: ['title'],
+        name: 'TitleComponent',
+        props: ['title'],
     };
     </script>
     ```
@@ -361,25 +367,25 @@ extnding_passinginfotochild2:
         a: |
           ```vue
           <template>
-            <title-component prop:title="Discount Broken Furniture"
+              <title-component prop:title="Discount Broken Furniture"
           </template>
           ```
         b: |
           ```vue
           <template>
-            <title-component title="Discount Broken Furniture"
+              <title-component title="Discount Broken Furniture"
           </template>
           ```
         c: |
           ```vue
           <template>
-            <title-component title="'Discount Broken Furniture'"
+              <title-component title="'Discount Broken Furniture'"
           </template>
           ```
         d: |
           ```vue
           <template>
-            <title-component :title="Discount Broken Furniture"
+              <title-component :title="Discount Broken Furniture"
           </template>
           ```
       correct: b
@@ -390,13 +396,13 @@ extending_dynamicattributes:
 
     ```vue
     <template>
-      <div>{{ title }}</div>
+        <div>{{ title }}</div>
     </template>
 
     <script>
     export default {
-      name: 'TitleComponent',
-      props: ['title'],
+        name: 'TitleComponent',
+        props: ['title'],
     };
     </script>
     ```
@@ -415,25 +421,25 @@ extending_dynamicattributes:
         a: |
           ```vue
           <template>
-            <title-component :title="categoryName" />
+              <title-component :title="categoryName" />
           </template>
           ```
         b: |
           ```vue
           <template>
-            <title-component title="{{ categoryName }}" />
+              <title-component title="{{ categoryName }}" />
           </template>
           ```
         c: |
           ```vue
           <template>
-            <title-component :title="{{ categoryName }}" />
+              <title-component :title="{{ categoryName }}" />
           </template>
           ```
         d: |
           ```vue
           <template>
-            <title-component :title="'categoryName'" />
+              <title-component :title="'categoryName'" />
           </template>
           ```
       correct: a
@@ -468,34 +474,34 @@ extending_dynamicattributes2:
         a: |
           ```javascript
           props: {
-            title: {
-              type: String,
-              required,
-            },
+              title: {
+                  type: String,
+                  required,
+              },
           },
           ```
         b: |
           ```javascript
           props: {
-            title: [String, true],
+              title: [String, true],
           },
           ```
         c: |
           ```javascript
           props: {
-            title: {
-              type: String,
-              required: true,
-            },
+              title: {
+                  type: String,
+                  required: true,
+              },
           },
           ```
         d: |
           ```javascript
           props: {
-            title: {
-              type: new String(),
-              required: true,
-            },
+              title: {
+                  type: new String(),
+                  required: true,
+              },
           },
           ```
       correct: c
@@ -541,7 +547,7 @@ extending_modularcss2:
     ```vue
     <style module>
     .component {
-      background-color: red;
+        background-color: red;
     }
     </style>
     ```
@@ -595,25 +601,25 @@ extending_aliases:
         a: |
           ```javascript
           .aliases({
-            '@': path.resolve(__dirname, 'assets/js/vue')
+              '@': path.resolve(__dirname, 'assets/js/vue')
           })
           ```
         b: |
           ```javascript
           .addAliases({
-            '@': path.resolve(__dirname, 'assets/js/vue')
+              '@': path.resolve(__dirname, 'assets/js/vue')
           })
           ```
         c: |
           ```javascript
           .aliases: {
-            '@': path.resolve(__dirname, 'assets/js/vue')
+              '@': path.resolve(__dirname, 'assets/js/vue')
           }
           ```
         d: |
           ```javascript
           .addAliases: () => ({
-            '@': path.resolve(__dirname, 'assets/js/vue')
+              '@': path.resolve(__dirname, 'assets/js/vue')
           })
           ```
       correct: b
@@ -624,14 +630,14 @@ extending_vfor:
 
     ```javascript
     data() {
-      return {
-        fruits: [
-          'Banana',
-          'Strawberry',
-          'Pienapple',
-          'Apple',
-        ],
-      };
+        return {
+            fruits: [
+                'Banana',
+                'Strawberry',
+                'Pienapple',
+                'Apple',
+            ],
+        };
     },
     ```
 
@@ -650,34 +656,34 @@ extending_vfor:
         a: |
           ```vue
           <span
-            v-for="fruit in fruits"
+              v-for="fruit in fruits"
           >
-            {{ fruit }}
+              {{ fruit }}
           </span>
           ```
         b: |
           ```vue
           <div v-for="(fruit, index) in fruits">
-            <span
-              :key="index"
-            >
-              {{ fruit }}
-            </span>
+              <span
+                  :key="index"
+              >
+                  {{ fruit }}
+              </span>
           </div>
           ```
         c: |
           ```vue
           <span
-            v-for="(fruit, index) in fruits"
-            :key="index"
+              v-for="(fruit, index) in fruits"
+              :key="index"
           >
-            {{ fruit }}
+              {{ fruit }}
           </span>
           ```
         d: |
           ```vue
           <span>
-            {{ fruits.reduce((fruit, acc) => { acc += 'fruit '; }, ''); }}
+              {{ fruits.reduce((fruit, acc) => { acc += 'fruit '; }, ''); }}
           </span>
           ```
       correct: c
@@ -698,17 +704,17 @@ extending_v-on:
         a: |
           ```vue
           :style="{
-            width: collapsed ? '70px' : 'auto',
-            color: darkMode ? 'white' : 'black',
-            backgroundColor: darkMode ? 'black' : 'white',
+              width: collapsed ? '70px' : 'auto',
+              color: darkMode ? 'white' : 'black',
+              backgroundColor: darkMode ? 'black' : 'white',
           }"
           ```
         b: |
           ```vue
           :style="[
-            { width: collapsed ? '70px' : 'auto' },
-            { color: darkMode ? 'white' : 'black' },
-            { backgroundColor: darkMode ? 'black' : 'white' },
+              { width: collapsed ? '70px' : 'auto' },
+              { color: darkMode ? 'white' : 'black' },
+              { backgroundColor: darkMode ? 'black' : 'white' },
           ]"
           ```
         c: |
@@ -718,9 +724,9 @@ extending_v-on:
         d: |
           ```vue
           style="{
-            width: collapsed ? '70px' : 'auto',
-            color: darkMode ? 'white' : 'black'
-            backgroundColor: darkMode ? 'black' : 'white',
+              width: collapsed ? '70px' : 'auto',
+              color: darkMode ? 'white' : 'black'
+              backgroundColor: darkMode ? 'black' : 'white',
           }"
           ```
       correct: a
@@ -747,14 +753,14 @@ extending_v-on2:
         c: |
           ```vue
           <span v-text="myText">
-            <h1>Some other stuff!</h1>
+              <h1>Some other stuff!</h1>
           </span>
           ```
         d: |
           ```vue
           <span>
-            {{ myText }}
-            <h1>Some other stuff!</h1>
+              {{ myText }}
+              <h1>Some other stuff!</h1>
           </span>
           ```
       correct: d
@@ -779,41 +785,41 @@ extending_v-on3:
         a: |
           ```javascript
           export default {
-            methods() {
-              const onFormSubmit = function() {
-                console.log('Form submit button clicked!');
-              };
+              methods() {
+                  const onFormSubmit = function() {
+                      console.log('Form submit button clicked!');
+                  };
 
-              return onFormSubmit;
-            }
+                  return onFormSubmit;
+              }
           };
           ```
         b: |
           ```javascript
           export default {
-            methods: {
-              onFormSubmit() {
-                console.log('Form submit button clicked!');
+              methods: {
+                  onFormSubmit() {
+                      console.log('Form submit button clicked!');
+                  },
               },
-            },
           };
           ```
         c: |
           ```javascript
           export default {
-            computed: {
-              onFormSubmit() {
-                console.log('Form submit button clicked!');
+              computed: {
+                  onFormSubmit() {
+                      console.log('Form submit button clicked!');
+                  },
               },
-            },
           };
           ```
         d: |
           ```javascript
           export default {
-            onFormSubmit() {
-              console.log('Form submit button clicked!');
-            },
+              onFormSubmit() {
+                  console.log('Form submit button clicked!');
+              },
           };
           ```
       correct: b
