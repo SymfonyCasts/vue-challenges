@@ -854,3 +854,170 @@ extending_reactivity:
         d: |
           By turning all of your members into getters and setters.
       correct: d
+
+extending-v-show:
+  question: |
+    Suppose we have a component that at some point renders a "Loading" message and we
+    want to show or hide this message depending on a `loading` state. Such component would
+    look a little bit like this:
+
+    ```vue
+    <template>
+        <span>Loading...</span>
+
+        <h1>Pizza Menu</h1>
+
+        <pizza-menu-list />
+    </template>
+
+    <script>
+    import PizzaMenuList from '@/components/pizza-menu-list';
+
+    export default {
+        name: 'MainComponent',
+        components: {
+            PizzaMenuList
+        },
+        data() {
+            return {
+                loading: true,
+            };
+        },
+    };
+    </script>
+    ```
+
+    What is the best way of showing and hiding this "Loading" `<span>`?
+  explanation: |
+    Exactly! Vue has a directive ready for just these sort of cases! We don't need to
+    do anything fancy. Just use the `v-show` directive (or the `v-if` if changes would
+    be more permanent) and the rest is taken care by Vue!
+
+    > Notice that the `:style` option is doing pretty much exactly what our `v-show`
+    > directive ends up doing in the DOM, but our `v-show` is much cleaner!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          <span>{{ loading ? 'Loading...' : '' }}</span>
+          ```
+        b: |
+          ```vue
+          <span :class="{ loading }">Loading...</span>
+          ```
+        c: |
+          ```vue
+          <span v-show="loading">Loading...</span>
+          ```
+        d: |
+          ```vue
+          <span :style="{ display: loading ? '' : 'none' }">Loading...</span>
+          ```
+      correct: c
+
+extending-v-show-2:
+  question: |
+    What is the difference between the `v-show` and the `v-if` directive?
+  explanation: |
+    Correct! While `v-show` will leave the elements in the DOM for a quick hide/show
+    operation, `v-if` will render or remove the elements depending on its state.
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          `v-show` uses a style rule to show or hide the Element in question, while
+          `v-if` removes or appends the Element in the DOM.
+        b: |
+          `v-show` is used for faster render times, while `v-if` uses less resources.
+        c: |
+          `v-show` is used for showing or hiding elements in the dom, while `v-if`
+          is used for control flow operations, much like in Twig.
+        d: |
+          They are two different ways to call the same thing
+      correct: a
+
+extending-v-show-3:
+  question: |
+    Let's say we have a component class called `.pineapple` in a modular css tag. We want
+    show a certain element in the Template if our pizzas cointain Pineapple. For this,
+    we've constructed a component like this:
+
+    ```vue
+    <template>
+        <div :class="$style.component">
+          <span>{{ pizza.name }}</span>
+        </div>
+    </template>
+
+    <script>
+    export default {
+        name: 'PizzaName',
+        props: ['pizza'],
+    };
+    </script>
+
+    <style lang="scss" module>
+    .component {
+        width: 120px;
+        display: inline-block
+
+        .controversial-flavour {
+            color: red;
+        }
+    }
+    </style>
+    ```
+
+    We know that `pizza` has a property called `containsPineapple`, which is a boolean.
+    How can we conditionally show the class `.controversial-flavour` if our pizza contains
+    pineapple?
+  explanation: |
+    That's right! We're faced with the problem of, first, referencing a class which name
+    has a `-` in it, so we have to use `[]` around our `$style` member like so:
+
+    ```javascript
+    $style['controversial-flavour']
+    ```
+
+    More so, in including this property as an object key, we *again* need to enclose this into
+    another pair of `[]`. So the result is as the one you've selected:
+
+    ```javascript
+    { [$style['controversial-flavour']] : piza.containsPineapple }
+    ```
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          <span :class="{
+              $style['controversial-flavour'] : pizza.containsPineapple
+          }">
+              {{ pizza.name }}
+          </span>
+          ```
+        b: |
+          ```vue
+          <span :class="{
+              [$style['controversial-flavour']] : pizza.containsPineapple
+          }">
+              {{ pizza.name }}
+          </span>
+          ```
+        c: |
+          ```vue
+          <span :class="{
+              'controversial-flavour' : pizza.containsPineapple
+          }">
+              {{ pizza.name }}
+          </span>
+          ```
+        d: |
+          ```vue
+          <span :class="[
+              'controversial-flavour', pizza.containsPineapple
+          ]">
+              {{ pizza.name }}
+          </span>
+          ```
+      correct: b
