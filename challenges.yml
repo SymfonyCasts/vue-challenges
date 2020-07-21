@@ -136,7 +136,7 @@ extending_dataandvuedevtools:
           ```javascript
           data(): {
               return {
-                legend: "My Legend Goes Here!",
+                  legend: "My Legend Goes Here!",
               };
           },
           ```
@@ -296,7 +296,7 @@ extnding_passinginfotochild:
     Which option would NOT be a valid way to define the `title` prop?
   explanation: |
     Correct! To define `props` for our component, we need to declare the
-    component `props` property. Its simplest form is an array
+    component's `props` property. Its simplest form is an array
     of strings, where each string is a prop name!
   features:
     multiple_choice:
@@ -381,8 +381,10 @@ extending_dynamicattributes:
   question: |
     Suppose we have a component named `TitleComponent` that is ready to be
     used. This component accepts a `title` prop and we want to populate it with
-    the value of an imaginary data key called `categoryName` like this:
+    the value of an imaginary data key called `categoryName`. Our main component
+    looks like this:
 
+    ```vue
     <template>
         <title-component />
     </template>
@@ -393,18 +395,19 @@ extending_dynamicattributes:
     export default {
         name: 'MainComponent',
         components: {
-          TitleComponent
+            TitleComponent
         },
         data() {
-          return {
-            categoryName: 'Cars',
-          }
+            return {
+                categoryName: 'Broken Cups',
+            }
         },
     };
     </script>
+    ```
 
-    How would you pass this value on to a property of `title-component`
-    using a shortcut syntax?
+    How would you pass this value down to a property of `title-component`
+    using the shortcut syntax?
   explanation: |
     Correct! When using the shortcut syntax - equivalent to `v-bind:title` - we're
     converting the attribute value into a JavaScript expression where we can
@@ -452,10 +455,10 @@ extending_dynamicattributes2:
     the component is rendered: we want `title` to accept a String and to
     be required. How can we do this?
   explanation: |
-    Correct! We NEED to pass an object whose members are equal to the names
+    Correct! We *need* to pass an object whose members are equal to the names
     of our defined props. Each member is  itself another object with the
     options `type` - which can be equal to a JavaScript type object, like
-    `String` - and `required` which is a boolean.
+    `String` - and `required`, which is a boolean.
 
     > When `required` is `false`, you can also define a `default` value using
     > that option.
@@ -605,7 +608,7 @@ extending_aliases:
           The project must have a Webpack Alias for `@` configured.
         d: |
           This project must have a Vue "directory root" set for the `@` symbol.
-      correct: b
+      correct: c
 
 extending_vfor:
   question: |
