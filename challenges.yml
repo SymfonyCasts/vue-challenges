@@ -939,8 +939,8 @@ extending-v-show-2:
 
 extending-v-show-3:
   question: |
-    Let's say we have a component class called `.pineapple` in a modular css tag. We want
-    show a certain element in the Template if our pizzas cointain Pineapple. For this,
+    Let's say we have a class called `.controversial-flavour` in a modular css tag. We want
+    to assign this class to an element in the Template if our pizzas cointain pineapple. For this,
     we've constructed a component like this:
 
     ```vue
@@ -980,8 +980,9 @@ extending-v-show-3:
     $style['controversial-flavour']
     ```
 
-    More so, in including this property as an object key, we *again* need to enclose this into
-    another pair of `[]`. So the result is as the one you've selected:
+    But that is not all! In including this property as an object key, we *again* need
+    to enclose this into another pair of `[]`. So the result is as the one you've
+    selected:
 
     ```javascript
     { [$style['controversial-flavour']] : piza.containsPineapple }
@@ -990,6 +991,7 @@ extending-v-show-3:
     multiple_choice:
       choices:
         a: |
+          ```vue
           <span :class="{
               $style['controversial-flavour'] : pizza.containsPineapple
           }">
@@ -1021,3 +1023,111 @@ extending-v-show-3:
           </span>
           ```
       correct: b
+
+extending_computed:
+  question: |
+    Let's say we have a component that contains two data properties that are `firstName` and
+    `lastName`. To make our lives easier, we want to display these names using a single
+    variable in the template. Such template would look like this:
+
+    ```vue
+    <template>
+        <span :class="$style.component">{{ name }}</span>
+    </template>
+    ```
+
+    What code would accomplish this in the best way?
+  explanation: |
+    That's right! `computed` is special for these type of issues. You would be able to access
+    the computed property as if it were a reactive property *anywhere* in your component!
+
+    For example, to access this computed property from a method, you can do:
+
+    ```javascript
+    this.name;
+    ```
+
+    That easy!
+
+    > Make sure your computed property *returns* the end result as a value. Do not make the mistake
+    > of assigning the end result to `this.name`, which is technically legal, becuase this would
+    > cause and *endless* cascade of function calls, effectively hanging the browser until the
+    > call stack limit is reached!
+  features:
+      multiple_choice:
+        choices:
+          a: |
+            ```vue
+            <script>
+            export default {
+                name: 'PersonComponent',
+                data() {
+                    return {
+                        firstName: 'Ryan',
+                        lastName: 'Weaver',
+                    },
+                },
+                computed() {
+                    return { name: this.firstName + ' ' + this.lastName };
+                },
+            };
+            </script>
+            ```
+          b: |
+            ```vue
+            <script>
+            export default {
+                name: 'PersonComponent',
+                data() {
+                    return {
+                        firstName: 'Ryan',
+                        lastName: 'Weaver',
+                    },
+                },
+                computed {
+                    name() {
+                        const name = this.firstName + ' ' + this.lastName;
+                    },
+                },
+            };
+            </script>
+            ```
+          c: |
+            ```vue
+            <script>
+            export default {
+                name: 'PersonComponent',
+                data() {
+                    return {
+                        firstName: 'Ryan',
+                        lastName: 'Weaver',
+                    },
+                },
+                computed {
+                    name() {
+                        this.name = this.firstName + ' ' + this.lastName;
+                    },
+                },
+            };
+            </script>
+            ```
+          d: |
+            ```vue
+            <script>
+            export default {
+                name: 'PersonComponent',
+                data() {
+                    return {
+                        firstName: 'Ryan',
+                        lastName: 'Weaver',
+                    },
+                },
+                computed {
+                    name() {
+                        return (this.firstName + ' ' + this.lastName);
+                    },
+                },
+            };
+            </script>
+            ```
+        correct: d
