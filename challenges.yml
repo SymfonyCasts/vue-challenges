@@ -1255,3 +1255,53 @@ extending_emit:
           </script>
           ```
       correct: a
+
+extending_ajaxwithaxios:
+  question: |
+    What is the purpose of the special function `mounted()` in Vue?
+  explanation: |
+    That's right. It's a special event callback that you can define in your
+    components to do stuff *just after* a component is mounted in the DOM.
+
+    This is very useful to perform stuff that needs DOM elements to be present.
+    While this is not common in Vue, you might still need to get a reference
+    to some Element directly.
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          It's purpose is to mount other components in the DOM when called
+        b: |
+          It's purpose is to execute code that results in DOM elements that will
+          be mounted in the DOM
+        c: |
+          It's purpose is to execute code right after the component hast been
+          mounted in the DOM
+        d: |
+          It's purpose is to execute code on component initialization
+      correct: c
+
+extending_smartvsdumbcomponents:
+  question: |
+    In the world of Vue and React, what is the relationship between "Dumb" and
+    "Smart" components?
+  explanation: |
+    Correct! Smart components are the logic bearing components, usually getting
+    data from the server and preparing it in different ways, while dumb components
+    only "present" that data to the user.
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          A smart component usually makes smart computations, while a dumb component
+          does the more common tasks.
+        b: |
+          A smart component usually is in charge of doing the logic of the application,
+          while a dumb component usually gets that data and renders it in a template.
+        c: |
+          A smart compponent usually is at the top of a component tree, while a dumb
+          component is more at the bottom.
+        d: |
+          A smart component usually does AI related things, like image processing, while
+          a dumb component handles the rest of the application logic.
+      correct: b
