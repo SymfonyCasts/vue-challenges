@@ -1144,6 +1144,7 @@ extending_whereshoulddatalive:
     ```vue
     <template>
         <span>{{ name }}</span>
+        <button @click="changeFirstName">Change First Name</button>
     </template>
 
     <script>
@@ -1156,15 +1157,15 @@ extending_whereshoulddatalive:
             }
         },
         methods: {
-            changeFirstName(newName) {
-                this.firstName = newName;
+            changeFirstName() {
+                this.firstName = 'Beckett';
             },
         },
     };
     </script>
     ```
 
-    In Vue, is it possible to mutate a prop?
+    What is wrong with this code?
   explanation: |
     That's right. While it is possible to mutate a prop, you should *never* do that!
     The appication will throw a warning and it will still work. But if `firstName`
@@ -1177,17 +1178,15 @@ extending_whereshoulddatalive:
     multiple_choice:
       choices:
         a: |
-          It is possible and can be done in some circumstances. Vue will throw a
-          warning to let us know what we're doing.
+          When you mutate a prop, you need to also emit an event so that the parent
+          component is aware.
         b: |
-          It is possible, but it should never be done. Also, Vue will throw a warning
-          whenever this happens.
+          You shouldn't mutate a prop.
         c: |
-          It isn't possible. The prop mutation will not happen and Vue will throw
-          a warning when you do it.
+          The `changeFirstName()` method must have an `event` argument.
         d: |
-          It isn't possible. The code will not work and Vue will throw an error when
-          you try to do it.
+          `firstName` should be moved to `data`. Then, we should set its initial value to
+          the `firstName` prop.
       correct: b
 
 extending_emit:
