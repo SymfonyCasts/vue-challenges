@@ -857,9 +857,8 @@ extending_reactivity:
 
 extending-v-show:
   question: |
-    Suppose we have a component that at some point renders a "Loading" message and we
-    want to show or hide this message depending on a `loading` state. Such component would
-    look a little bit like this:
+    Pizza time! Check out the following component where we need to hide or show
+    a "Loading" message depending on a `loading` state.
 
     ```vue
     <template>
@@ -887,14 +886,14 @@ extending-v-show:
     </script>
     ```
 
-    What is the best way of showing and hiding this "Loading" `<span>`?
+    What is the best way to hide and show the "Loading" `<span>`?
   explanation: |
     Exactly! Vue has a directive ready for just these sort of cases! We don't need to
     do anything fancy. Just use the `v-show` directive (or the `v-if` if changes would
-    be more permanent) and the rest is taken care by Vue!
+    be more permanent) and the rest is handled by Vue!
 
     > Notice that the `:style` option is doing pretty much exactly what our `v-show`
-    > directive ends up doing in the DOM, but our `v-show` is much cleaner!
+    > directive ends up doing in the DOM, but `v-show` is much cleaner!
   features:
     multiple_choice:
       choices:
@@ -918,10 +917,15 @@ extending-v-show:
 
 extending-v-show-2:
   question: |
-    What is the difference between the `v-show` and the `v-if` directive?
+    What is the difference between the `v-show` and `v-if` directives?
   explanation: |
     Correct! While `v-show` will leave the elements in the DOM for a quick hide/show
-    operation, `v-if` will render or remove the elements depending on its state.
+    operation, `v-if` will completely render or remove the elements depending on
+    its state.
+
+    It *is* true that, if a complex section may not be displayed at *all* on initial
+    load, using `v-if` is more performant because Vue spend *any* time rendering
+    what's inside.
   features:
     multiple_choice:
       choices:
@@ -934,13 +938,13 @@ extending-v-show-2:
           `v-show` is used for showing or hiding elements in the dom, while `v-if`
           is used for control flow operations, much like in Twig.
         d: |
-          They are two different ways to call the same thing
+          They are two different ways to do the same thing
       correct: a
 
 extending-v-show-3:
   question: |
-    Let's say we have a class called `.controversial-flavour` in a modular css tag. We want
-    to assign this class to an element in the Template if our pizzas cointain pineapple. For this,
+    Let's say we have a class called `.controversial-flavor` in a modular css tag. We want
+    to assign this class to an element in the template if our pizza cointains pineapple. For this,
     we've constructed a component like this:
 
     ```vue
@@ -962,7 +966,7 @@ extending-v-show-3:
         width: 120px;
         display: inline-block
 
-        .controversial-flavour {
+        .controversial-flavor {
             color: red;
         }
     }
@@ -970,22 +974,22 @@ extending-v-show-3:
     ```
 
     We know that `pizza` has a property called `containsPineapple`, which is a boolean.
-    How can we conditionally show the class `.controversial-flavour` if our pizza contains
+    How can we conditionally show the `.controversial-flavor` class if the pizza contains
     pineapple?
   explanation: |
-    That's right! We're faced with the problem of, first, referencing a class which name
-    has a `-` in it, so we have to use `[]` around our `$style` member like so:
+    That's right! We're faced with the problem of, first, referencing a class whose name
+    has a `-` in it, so we have to use `[]` around the `$style` variable:
 
     ```javascript
-    $style['controversial-flavour']
+    $style['controversial-flavor']
     ```
 
-    But that is not all! In including this property as an object key, we *again* need
-    to enclose this into another pair of `[]`. So the result is as the one you've
-    selected:
+    But that's not all! In order to include this property as an object *key*, we *again* need
+    to enclose this in another pair of `[]`. The result is as the one you selected.
+    It's ugly, but correct:
 
     ```javascript
-    { [$style['controversial-flavour']] : piza.containsPineapple }
+    { [$style['controversial-flavor']] : pizza.containsPineapple }
     ```
   features:
     multiple_choice:
@@ -993,7 +997,7 @@ extending-v-show-3:
         a: |
           ```vue
           <span :class="{
-              $style['controversial-flavour'] : pizza.containsPineapple
+              $style['controversial-flavor']: pizza.containsPineapple
           }">
               {{ pizza.name }}
           </span>
@@ -1001,7 +1005,7 @@ extending-v-show-3:
         b: |
           ```vue
           <span :class="{
-              [$style['controversial-flavour']] : pizza.containsPineapple
+              [$style['controversial-flavor']]: pizza.containsPineapple
           }">
               {{ pizza.name }}
           </span>
@@ -1009,7 +1013,7 @@ extending-v-show-3:
         c: |
           ```vue
           <span :class="{
-              'controversial-flavour' : pizza.containsPineapple
+              'controversial-flavor': pizza.containsPineapple
           }">
               {{ pizza.name }}
           </span>
@@ -1017,7 +1021,7 @@ extending-v-show-3:
         d: |
           ```vue
           <span :class="[
-              'controversial-flavour', pizza.containsPineapple
+              'controversial-flavor', pizza.containsPineapple
           ]">
               {{ pizza.name }}
           </span>
@@ -1026,9 +1030,9 @@ extending-v-show-3:
 
 extending_computed:
   question: |
-    Let's say we have a component that contains two data properties that are `firstName` and
+    Let's say we have a component that contains two data properties: `firstName` and
     `lastName`. To make our lives easier, we want to display these names using a single
-    variable in the template. Such template would look like this:
+    `name` variable in the template:
 
     ```vue
     <template>
@@ -1163,9 +1167,12 @@ extending_whereshoulddatalive:
     In Vue, is it possible to mutate a prop?
   explanation: |
     That's right. While it is possible to mutate a prop, you should *never* do that!
-    The appication will throw a warning, and it will still work. But if the data
-    your prop is hook up to ever changes, it will override whatever you have assigned it
-    to. So, as a rule of thumb: NEVER mutate a prop!
+    The appication will throw a warning and it will still work. But if `firstName`
+    is stored as data in a parent component, it will now be out-of-sync with the
+    `firstName` prop in this component! Worse, if the data changes in the parent
+    component, it will *override* our mutated value.
+
+    So, even though you "can", NEVER mutate a prop!
   features:
     multiple_choice:
       choices:
@@ -1185,11 +1192,11 @@ extending_whereshoulddatalive:
 
 extending_emit:
   question: |
-    Which of these examples will NOT emit an event called `onButtonClick` when the button
+    Which of these examples will NOT emit an event called `button_click` when the button
     is clicked?
   explanation: |
     If you look closely, `:click` will not be executed because you are actually
-    defining a dynamic attribute called `click` set to the `$emit` call. well done!
+    defining a dynamic attribute called `click` set to the `$emit` call. Well done!
 
     > You can call `$emit` from the template, or from methods in your
     > component.
@@ -1199,7 +1206,7 @@ extending_emit:
         a: |
           ```vue
           <template>
-              <button :click="$emit('onButtonClicked')" />
+              <button :click="$emit('button_click')" />
           </template>
 
           <script>
@@ -1211,7 +1218,7 @@ extending_emit:
         b: |
           ```vue
           <template>
-              <button @click="$emit('onButtonClicked')" />
+              <button @click="$emit('button_click')" />
           </template>
 
           <script>
@@ -1231,7 +1238,7 @@ extending_emit:
               name: 'ButtonComponent',
               methods: {
                   onButtonClicked() {
-                      this.$emit('onButtonClicked');
+                      this.$emit('button_click');
                   },
               },
           };
@@ -1248,7 +1255,7 @@ extending_emit:
               name: 'ButtonComponent',
               methods: {
                   onButtonClicked() {
-                      this.$emit('onButtonClicked');
+                      this.$emit('button_click');
                   },
               },
           };
@@ -1258,14 +1265,14 @@ extending_emit:
 
 extending_ajaxwithaxios:
   question: |
-    What is the purpose of the special function `mounted()` in Vue?
+    What is the purpose of the special `mounted()` function in Vue?
   explanation: |
     That's right. It's a special event callback that you can define in your
     components to do stuff *just after* a component is mounted in the DOM.
 
     This is very useful to perform stuff that needs DOM elements to be present.
     While this is not common in Vue, you might still need to get a reference
-    to some Element directly.
+    to an Element directly.
   features:
     multiple_choice:
       choices:
@@ -1275,7 +1282,7 @@ extending_ajaxwithaxios:
           It's purpose is to execute code that results in DOM elements that will
           be mounted in the DOM
         c: |
-          It's purpose is to execute code right after the component hast been
+          It's purpose is to execute code right after the component has been
           mounted in the DOM
         d: |
           It's purpose is to execute code on component initialization
@@ -1289,6 +1296,13 @@ extending_smartvsdumbcomponents:
     Correct! Smart components are the logic bearing components, usually getting
     data from the server and preparing it in different ways, while dumb components
     only "present" that data to the user.
+
+    This creates a pattern that's similar to controllers and templates in Symfony.
+    A controller (smart component) contains logic and passes variables into a
+    template (dumb component) that mostly just renders those.
+
+    If you keep this idea in mind, it can help you keep your components more
+    organized.
   features:
     multiple_choice:
       choices:
