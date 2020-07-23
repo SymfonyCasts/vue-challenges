@@ -854,3 +854,454 @@ extending_reactivity:
         d: |
           By turning all of your members into getters and setters.
       correct: d
+
+extending-v-show:
+  question: |
+    Suppose we have a component that at some point renders a "Loading" message and we
+    want to show or hide this message depending on a `loading` state. Such component would
+    look a little bit like this:
+
+    ```vue
+    <template>
+        <span>Loading...</span>
+
+        <h1>Pizza Menu</h1>
+
+        <pizza-menu-list />
+    </template>
+
+    <script>
+    import PizzaMenuList from '@/components/pizza-menu-list';
+
+    export default {
+        name: 'MainComponent',
+        components: {
+            PizzaMenuList
+        },
+        data() {
+            return {
+                loading: true,
+            };
+        },
+    };
+    </script>
+    ```
+
+    What is the best way of showing and hiding this "Loading" `<span>`?
+  explanation: |
+    Exactly! Vue has a directive ready for just these sort of cases! We don't need to
+    do anything fancy. Just use the `v-show` directive (or the `v-if` if changes would
+    be more permanent) and the rest is taken care by Vue!
+
+    > Notice that the `:style` option is doing pretty much exactly what our `v-show`
+    > directive ends up doing in the DOM, but our `v-show` is much cleaner!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          <span>{{ loading ? 'Loading...' : '' }}</span>
+          ```
+        b: |
+          ```vue
+          <span :class="{ loading }">Loading...</span>
+          ```
+        c: |
+          ```vue
+          <span v-show="loading">Loading...</span>
+          ```
+        d: |
+          ```vue
+          <span :style="{ display: loading ? '' : 'none' }">Loading...</span>
+          ```
+      correct: c
+
+extending-v-show-2:
+  question: |
+    What is the difference between the `v-show` and the `v-if` directive?
+  explanation: |
+    Correct! While `v-show` will leave the elements in the DOM for a quick hide/show
+    operation, `v-if` will render or remove the elements depending on its state.
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          `v-show` uses a style rule to show or hide the Element in question, while
+          `v-if` removes or appends the Element in the DOM.
+        b: |
+          `v-show` is used for faster render times, while `v-if` uses less resources.
+        c: |
+          `v-show` is used for showing or hiding elements in the dom, while `v-if`
+          is used for control flow operations, much like in Twig.
+        d: |
+          They are two different ways to call the same thing
+      correct: a
+
+extending-v-show-3:
+  question: |
+    Let's say we have a class called `.controversial-flavour` in a modular css tag. We want
+    to assign this class to an element in the Template if our pizzas cointain pineapple. For this,
+    we've constructed a component like this:
+
+    ```vue
+    <template>
+        <div :class="$style.component">
+          <span>{{ pizza.name }}</span>
+        </div>
+    </template>
+
+    <script>
+    export default {
+        name: 'PizzaName',
+        props: ['pizza'],
+    };
+    </script>
+
+    <style lang="scss" module>
+    .component {
+        width: 120px;
+        display: inline-block
+
+        .controversial-flavour {
+            color: red;
+        }
+    }
+    </style>
+    ```
+
+    We know that `pizza` has a property called `containsPineapple`, which is a boolean.
+    How can we conditionally show the class `.controversial-flavour` if our pizza contains
+    pineapple?
+  explanation: |
+    That's right! We're faced with the problem of, first, referencing a class which name
+    has a `-` in it, so we have to use `[]` around our `$style` member like so:
+
+    ```javascript
+    $style['controversial-flavour']
+    ```
+
+    But that is not all! In including this property as an object key, we *again* need
+    to enclose this into another pair of `[]`. So the result is as the one you've
+    selected:
+
+    ```javascript
+    { [$style['controversial-flavour']] : piza.containsPineapple }
+    ```
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          <span :class="{
+              $style['controversial-flavour'] : pizza.containsPineapple
+          }">
+              {{ pizza.name }}
+          </span>
+          ```
+        b: |
+          ```vue
+          <span :class="{
+              [$style['controversial-flavour']] : pizza.containsPineapple
+          }">
+              {{ pizza.name }}
+          </span>
+          ```
+        c: |
+          ```vue
+          <span :class="{
+              'controversial-flavour' : pizza.containsPineapple
+          }">
+              {{ pizza.name }}
+          </span>
+          ```
+        d: |
+          ```vue
+          <span :class="[
+              'controversial-flavour', pizza.containsPineapple
+          ]">
+              {{ pizza.name }}
+          </span>
+          ```
+      correct: b
+
+extending_computed:
+  question: |
+    Let's say we have a component that contains two data properties that are `firstName` and
+    `lastName`. To make our lives easier, we want to display these names using a single
+    variable in the template. Such template would look like this:
+
+    ```vue
+    <template>
+        <span :class="$style.component">{{ name }}</span>
+    </template>
+    ```
+
+    What code would accomplish this in the best way?
+  explanation: |
+    That's right! `computed` is special for these type of issues. You would be able to access
+    the computed property as if it were a reactive property *anywhere* in your component!
+
+    For example, to access this computed property from a method, you can do:
+
+    ```javascript
+    this.name;
+    ```
+
+    That easy!
+
+    > Make sure your computed property *returns* the end result as a value. Do not make the mistake
+    > of assigning the end result to `this.name`, which is technically legal, becuase this would
+    > cause and *endless* cascade of function calls, effectively hanging the browser until the
+    > call stack limit is reached!
+  features:
+      multiple_choice:
+        choices:
+          a: |
+            ```vue
+            <script>
+            export default {
+                name: 'PersonComponent',
+                data() {
+                    return {
+                        firstName: 'Ryan',
+                        lastName: 'Weaver',
+                    },
+                },
+                computed() {
+                    return { name: this.firstName + ' ' + this.lastName };
+                },
+            };
+            </script>
+            ```
+          b: |
+            ```vue
+            <script>
+            export default {
+                name: 'PersonComponent',
+                data() {
+                    return {
+                        firstName: 'Ryan',
+                        lastName: 'Weaver',
+                    },
+                },
+                computed {
+                    name() {
+                        const name = this.firstName + ' ' + this.lastName;
+                    },
+                },
+            };
+            </script>
+            ```
+          c: |
+            ```vue
+            <script>
+            export default {
+                name: 'PersonComponent',
+                data() {
+                    return {
+                        firstName: 'Ryan',
+                        lastName: 'Weaver',
+                    },
+                },
+                computed {
+                    name() {
+                        this.name = this.firstName + ' ' + this.lastName;
+                    },
+                },
+            };
+            </script>
+            ```
+          d: |
+            ```vue
+            <script>
+            export default {
+                name: 'PersonComponent',
+                data() {
+                    return {
+                        firstName: 'Ryan',
+                        lastName: 'Weaver',
+                    },
+                },
+                computed {
+                    name() {
+                        return (this.firstName + ' ' + this.lastName);
+                    },
+                },
+            };
+            </script>
+            ```
+        correct: d
+
+extending_whereshoulddatalive:
+  question: |
+    Let's say you have a component with a prop named `firstName` and you change it inside
+    that component using a method like so:
+
+    ```vue
+    <template>
+        <span>{{ name }}</span>
+    </template>
+
+    <script>
+    export default {
+        name: 'NameComponent',
+        props: ['firstName', 'lastName'],
+        computed: {
+            name() {
+                return this.firstName + ' ' + this.lastName;
+            }
+        },
+        methods: {
+            changeFirstName(newName) {
+                this.firstName = newName;
+            },
+        },
+    };
+    </script>
+    ```
+
+    In Vue, is it possible to mutate a prop?
+  explanation: |
+    That's right. While it is possible to mutate a prop, you should *never* do that!
+    The appication will throw a warning, and it will still work. But if the data
+    your prop is hook up to ever changes, it will override whatever you have assigned it
+    to. So, as a rule of thumb: NEVER mutate a prop!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          It is possible and can be done in some circumstances. Vue will throw a
+          warning to let us know what we're doing.
+        b: |
+          It is possible, but it should never be done. Also, Vue will throw a warning
+          whenever this happens.
+        c: |
+          It isn't possible. The prop mutation will not happen and Vue will throw
+          a warning when you do it.
+        d: |
+          It isn't possible. The code will not work and Vue will throw an error when
+          you try to do it.
+      correct: b
+
+extending_emit:
+  question: |
+    Which of these examples will NOT emit an event called `onButtonClick` when the button
+    is clicked?
+  explanation: |
+    If you look closely, `:click` will not be executed because you are actually
+    defining a dynamic attribute called `click` set to the `$emit` call. well done!
+
+    > You can call `$emit` from the template, or from methods in your
+    > component.
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          <template>
+              <button :click="$emit('onButtonClicked')" />
+          </template>
+
+          <script>
+          export default {
+              name: 'ButtonComponent',
+          };
+          </script>
+          ```
+        b: |
+          ```vue
+          <template>
+              <button @click="$emit('onButtonClicked')" />
+          </template>
+
+          <script>
+          export default {
+              name: 'ButtonComponent',
+          };
+          </script>
+          ```
+        c: |
+          ```vue
+          <template>
+              <button @click="onButtonClicked" />
+          </template>
+
+          <script>
+          export default {
+              name: 'ButtonComponent',
+              methods: {
+                  onButtonClicked() {
+                      this.$emit('onButtonClicked');
+                  },
+              },
+          };
+          </script>
+          ```
+        d: |
+          ```vue
+          <template>
+              <button v-on:click="onButtonClicked" />
+          </template>
+
+          <script>
+          export default {
+              name: 'ButtonComponent',
+              methods: {
+                  onButtonClicked() {
+                      this.$emit('onButtonClicked');
+                  },
+              },
+          };
+          </script>
+          ```
+      correct: a
+
+extending_ajaxwithaxios:
+  question: |
+    What is the purpose of the special function `mounted()` in Vue?
+  explanation: |
+    That's right. It's a special event callback that you can define in your
+    components to do stuff *just after* a component is mounted in the DOM.
+
+    This is very useful to perform stuff that needs DOM elements to be present.
+    While this is not common in Vue, you might still need to get a reference
+    to some Element directly.
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          It's purpose is to mount other components in the DOM when called
+        b: |
+          It's purpose is to execute code that results in DOM elements that will
+          be mounted in the DOM
+        c: |
+          It's purpose is to execute code right after the component hast been
+          mounted in the DOM
+        d: |
+          It's purpose is to execute code on component initialization
+      correct: c
+
+extending_smartvsdumbcomponents:
+  question: |
+    In the world of Vue and React, what is the relationship between "Dumb" and
+    "Smart" components?
+  explanation: |
+    Correct! Smart components are the logic bearing components, usually getting
+    data from the server and preparing it in different ways, while dumb components
+    only "present" that data to the user.
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          A smart component usually makes smart computations, while a dumb component
+          does the more common tasks.
+        b: |
+          A smart component usually is in charge of doing the logic of the application,
+          while a dumb component usually gets that data and renders it in a template.
+        c: |
+          A smart compponent usually is at the top of a component tree, while a dumb
+          component is more at the bottom.
+        d: |
+          A smart component usually does AI related things, like image processing, while
+          a dumb component handles the rest of the application logic.
+      correct: b
