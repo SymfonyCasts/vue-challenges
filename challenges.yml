@@ -354,25 +354,25 @@ extnding_passinginfotochild2:
         a: |
           ```vue
           <template>
-              <title-component prop:title="Discount Broken Furniture"
+              <title-component prop:title="Discount Broken Furniture" />
           </template>
           ```
         b: |
           ```vue
           <template>
-              <title-component title="Discount Broken Furniture"
+              <title-component title="Discount Broken Furniture" />
           </template>
           ```
         c: |
           ```vue
           <template>
-              <title-component title="'Discount Broken Furniture'"
+              <title-component title="'Discount Broken Furniture'" />
           </template>
           ```
         d: |
           ```vue
           <template>
-              <title-component :title="Discount Broken Furniture"
+              <title-component :title="Discount Broken Furniture" />
           </template>
           ```
       correct: b
