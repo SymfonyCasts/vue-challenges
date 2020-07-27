@@ -112,7 +112,7 @@ extending_singlefilecomponent:
 
 extending_dataandvuedevtools:
   question: |
-    Which of these is NOT valid syntax to initialize a data object
+    Which of these is NOT a valid way to initialize a data object
     in Vue?
   explanation: |
     That's right! Data can be just an `Object`, or (more commonly) a function
@@ -134,7 +134,7 @@ extending_dataandvuedevtools:
           },
         c: |
           ```javascript
-          data(): {
+          data() {
               return {
                   legend: "My Legend Goes Here!",
               };
