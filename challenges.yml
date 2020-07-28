@@ -1665,3 +1665,113 @@ extending_v_model:
         d: |
           It binds my data property `firstName` to our `input` element.
       correct: a
+
+extending_filtering_products:
+  question: |
+    I LOVE hamsters. In fact, I love them so much that I wronte a Vue application
+    that keeps track of all the hamsters I own.
+
+    One of the key parts of this application is the Hamster Counter component, which
+    has to keep track of the total number of hamsters I own and print it on the screen,
+    but I'm having trouble wiring the custom events that I created!
+
+    ```vue
+    <template>
+        <div>
+            <h1>Hamster List</h1>
+            <hamster-manager @on-hamster-list-update="updateCounter" />
+        </div>
+        <div>
+            <hamster-counter :total-hamsters="totalHamsters" />
+        </div>
+    </template>
+    ```
+
+    What would the `script` section of this component look like in order to make
+    this work?
+  explanation: |
+    Excellent job! That solution will keep the length as a `data` property in
+    my main component that will automatically update my counter's `totalHamsters`
+    prop!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          <script>
+          export default {
+              name: 'MainComponent',
+              computed: {
+                  totalHamsters() {
+                      return 0;
+                  }
+              },
+              methods: {
+                  updateCounter(data) {
+                      this.totalHamsters = data.length;
+                  },
+              },
+          };
+          </script>
+          ```
+        b: |
+          ```vue
+          <script>
+          export default {
+              name: 'MainComponent',
+              data() {
+                  return {
+                      hamstersLength: 0,
+                  };
+              },
+              computed: {
+                  totalHamsters() {
+                      return hamstersLength;
+                  }
+              }
+              methods: {
+                  updateCounter(data) {
+                      this.hamstersLength = data.length;
+                  },
+              },
+          };
+          </script>
+          ```
+        c: |
+          ```vue
+          <script>
+          export default {
+              name: 'MainComponent',
+              props: {
+                  totalHamsters: {
+                      type: Number,
+                      default: 0,
+                  },
+              },
+              methods: {
+                  updateCounter(data) {
+                      this.totalHamsters = data.length;
+                  },
+              },
+          };
+          </script>
+          ```
+        d: |
+          ```vue
+          <script>
+          export default {
+              name: 'MainComponent',
+              data() {
+                  return {
+                      totalHamsters: 0,
+                  };
+              },
+              methods: {
+                  updateCounter(data) {
+                      this.totalHamsters = data.length;
+                  },
+              },
+          };
+          </script>
+          ```
+      correct: d
