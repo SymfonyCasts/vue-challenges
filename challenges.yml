@@ -1626,3 +1626,42 @@ extending_passing_props_vs_fetching:
           The data will never change, and it's globally available, so it doesn't have
           to be reactive.
       correct: c
+
+extending_v_model:
+  question: |
+    I just created my own `input` element with a `v-model` directive in it!
+
+    ```vue
+    <input
+        type="text"
+        placeholder="Enter your name..."
+        v-model="firstName"
+    />
+    ```
+
+    What is `v-model` NOT responsible for in this case?
+  explanation: |
+    That's right! As we've just seen, `v-model` is responsible for setting the
+    `value` property of the element to `firstName` and *also* wiring the `@input`
+    event so that changes to the input reflect back on the property!
+
+    This is effectibly a double binding of our `firstName` data into the HTML
+    component.
+
+    This however doesn't include the creation of the `data` member `firstName`. This
+    must already exist in our component for it to work!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          It creates a `firstName` data property for us to use in the rest of our
+          component.
+        b: |
+          It sets my element's `:value` property to `firstName`, which lives
+          in my `data`.
+        c: |
+          It will set my data property `firstName` to the contents of the input
+          whenever the user changes it, using `@input`.
+        d: |
+          It binds my data property `firstName` to our `input` element.
+      correct: a
