@@ -1601,3 +1601,28 @@ extending_skipping_ajax2:
         d: |
           The current category id or name.
       correct: b
+
+extending_passing_props_vs_fetching:
+  question: |
+    Which of these cases is NOT a valid reason to skip the use of props for
+    passing down data that is reactive?
+  explanation: |
+    That's right! Even if data is available through a service, if we later want
+    to *change* such data and have its changes propagate propertly throughout our
+    application, we *need* to pass it down as props to other components that depend
+    on it! In Vue 2 it's the only way!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          My application uses Vuex, so its data is available from every component
+          and is reactive.
+        b: |
+          In Vue 3, I have reactive data as outside modules that I can import
+          from anywhere.
+        c: |
+          The data I'm passing down in props is available as a service.
+        d: |
+          The data will never change, and it's globally available, so it doesn't have
+          to be reactive.
+      correct: c
