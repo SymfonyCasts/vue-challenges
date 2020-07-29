@@ -1943,3 +1943,137 @@ extending_business_helpers2:
           </script>
           ```
       correct: b
+
+extending_watchers:
+  question: |
+    It is said that `watchers` are our last resort in Vue. We should use them
+    when no alternative method is present.
+
+    More specifically, when should watchers be used in Vue?
+  explanation: |
+    That's right! If you need to perform an asynchronous operation as a result
+    of a data or prop change, computed properties won't work for you!
+
+    Usually, you want to have some event being emitted so that you can respond
+    to them, but if you don't have that option, use watchers!
+
+    > Watchers are also useful to detect changes in `props`, where no other clear
+    > method exists.
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          If we need to perform an asynchronous operation when the component
+          loads, we should use watchers.
+        b: |
+          If we need to listen to changes to data members a lot, we should
+          use watchers.
+        c: |
+          If we need to listen to a prop change, or we need to perform an
+          asynchronous operation as a result of some data change, we should
+          use watchers.
+        d: |
+          We should never use watchers. They are deprecated!
+      correct: c
+
+extending_watchers2:
+  question: |
+    In my CarTitle component, I receive a `car` prop that contains both `model` and
+    `brand` as separate members. This prop changes because the user can
+    choose from 2 drop down menus that exist elsewhere in the page.
+
+    What I'd like to do is listen to these prop change and automatically update
+    my car title!
+
+    Which of these examples would do the job in the best way?
+  explanation: |
+    Perfect! Since our operation is totally synchronous for now, we really do NOT
+    need to implement a watcher here. A computed property would work just fine!
+
+    > Remember, watchers are to be used when no other good method is available to us!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          <template>
+              <h1>{{ carName }}</h1>
+          </template>
+
+          <script>
+          export default {
+              name: 'CarTitle',
+              props: ['car'],
+              computed: {
+                  carName() {
+                      return car.brand + ' ' + car.model;
+                  },
+              },
+          };
+          </script>
+          ```
+        b: |
+          ```vue
+          <template>
+              <h1>{{ carName }}</h1>
+          </template>
+
+          <script>
+          export default {
+              name: 'CarTitle',
+              props: ['car'],
+              data() {
+                  return {
+                      carName: car.brand + ' ' + car.model,
+                  };
+              },
+              watchers: {
+                  car(newVal) {
+                      this.carName = newVal.brand + ' ' + newVal.model;
+                  },
+              },
+          };
+          </script>
+          ```
+        c: |
+          ```vue
+          <template>
+              <h1>{{ carName }}</h1>
+          </template>
+
+          <script>
+          export default {
+              name: 'CarTitle',
+              props: ['car'],
+              data() {
+                  return {
+                      carName: this.getCarName(),
+                  };
+              },
+              methods: {
+                  getCarName() {
+                      return car.brand + ' ' + car.model;
+                  },
+              },
+          };
+          </script>
+          ```
+        d: |
+          ```vue
+          <template>
+              <h1>{{ getCarName }}</h1>
+          </template>
+
+          <script>
+          export default {
+              name: 'CarTitle',
+              props: ['car'],
+              methods: {
+                  getCarName() {
+                      return car.brand + ' ' + car.model;
+                  },
+              },
+          };
+          </script>
+          ```
+      correct: a
