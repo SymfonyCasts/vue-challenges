@@ -1775,3 +1775,171 @@ extending_filtering_products:
           </script>
           ```
       correct: d
+
+extending_async_computed:
+  question: |
+    Why can't computed properties be asynchronous?
+  explanation: |
+    That's right! A computed property function is executed whenever any of the reactive
+    properties used inside it changes. This happens in the context of a re-render, meaning
+    that the value that the computed property returns needs to be applied *immediately*!
+
+    If a computed property returns a Promise, this isn't a real value, so the re-render
+    wouldn't be able to finish!
+
+    > The concept of `reactivity` involves *No Promises*! Whenever a value change,
+    > the template "reacts" at once!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          Because it hasn't been implemented by Vue.
+        b: |
+          Because its return type cannot be a Promise.
+        c: |
+          Because it's a bad practice to do so.
+        d: |
+          Because the `async` keyword results in a syntax error in thast context.
+      correct: b
+
+extending_business_helpers:
+  question: |
+    Helpers are very useful aids to our applications! But what are
+    helpers NOT useful for?
+  explanation: |
+    Correct! If a so called *helper* is making API calls or preparing a piece of
+    data from outside of our application to be used inside, we usually call them
+    `services`. The difference is subtle, but more often than not, programmers
+    will refer to `helpers` as simple procesing functions.
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          Helpers are usefull for separating a piece of code that we want to
+          re-use elsewhere.
+        b: |
+          Helpers are usefull for extracting a piece of our application logic that
+          we want to unit-test.
+        c: |
+          Helpers are usefull for extracting API calls and general managing our data
+          processing needs in our application.
+        d: |
+          Helpers are usefull for extracting part of our logic out of a component so
+          that the component is easier to read and maintian.
+      correct: c
+
+extending_business_helpers2:
+  question: |
+    So I have set up this awesome helper that helps me put Pineapple on top of
+    regular pizzas! Here it is:
+
+    ```javascript
+    export default (pizzaTopping) => (
+        pizzaTopping + ' with Pineapple!'
+    );
+    ```
+
+    Now I want to use it in my pizza component so that every pizza topping has
+    Pineapple on it! Which of these examples would *not* make it work?
+  explanation: |
+    Exactly! Just like in our video, one of the simplest ways of using a helper
+    to process some data that we want to output into our template is to have a
+    computed property make the work.
+
+    But you can also use other methods, like wrapping the helper inside a method,
+    or having it initialize inside your data function!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          <template>
+              <h1>{{ pizza.name }}</h1>
+
+              <h2>Topping:</h2>
+
+              <p>{{ pizzaTopping }}</p>
+          </template>
+
+          <script>
+          import getPizzaWithPineapple from '@/helpers/get-pizza-with-pineapple';
+
+          export default {
+              name: 'PizzaComponent',
+              props: ['pizza'],
+              computed: {
+                  pizzaTopping() {
+                      return getPizzaWithPineapple(pizza.topping);
+                  },
+              },
+          };
+          </script>
+          ```
+        b: |
+          ```vue
+          <template>
+              <h1>{{ pizza.name }}</h1>
+
+              <h2>Topping:</h2>
+
+              <p>{{ getPizzaWithPineapple(pizza.topping) }}</p>
+          </template>
+
+          <script>
+          import getPizzaWithPineapple from '@/helpers/get-pizza-with-pineapple';
+
+          export default {
+              name: 'PizzaComponent',
+              props: ['pizza'],
+          };
+          </script>
+          ```
+        c: |
+          ```vue
+          <template>
+              <h1>{{ pizza.name }}</h1>
+
+              <h2>Topping:</h2>
+
+              <p>{{ getPizzaTopping() }}</p>
+          </template>
+
+          <script>
+          import getPizzaWithPineapple from '@/helpers/get-pizza-with-pineapple';
+
+          export default {
+              name: 'PizzaComponent',
+              props: ['pizza'],
+              methods: {
+                  getPizzaTopping() {
+                      return getPizzaWithPineapple(pizza.topping);
+                  }
+              },
+          };
+          </script>
+          ```
+        d: |
+          ```vue
+          <template>
+              <h1>{{ pizza.name }}</h1>
+
+              <h2>Topping:</h2>
+
+              <p>{{ pizzaTopping }}</p>
+          </template>
+
+          <script>
+          import getPizzaWithPineapple from '@/helpers/get-pizza-with-pineapple';
+
+          export default {
+              name: 'PizzaComponent',
+              props: ['pizza'],
+              data() {
+                  return {
+                      pizzaTopping: getPizzaWithPineapple(pizza.topping)
+                  };
+              },
+          };
+          </script>
+          ```
+      correct: b
