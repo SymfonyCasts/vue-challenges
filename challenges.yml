@@ -1325,12 +1325,12 @@ extending_loadingcomponent:
     In Vue, when should we use `created` instead of `mounted` for our components?
   explanation: |
     That's right! `created` will execute as soon as the component is instantiated. Even
-    though the DOM structure still *isn't* mounted, you still can perform any other
+    though the DOM structure still *isn't* mounted, you can still perform any other
     operations that deal with reactive data!
 
     `mounted`, on the other hand, will be executed once the component has been mounted
-    in the DOM. This is usefull for any edge case in which you need to manipulate the
-    dom directly!
+    in the DOM. This is useful for any edge case when you need to manipulate the
+    DOM directly!
   features:
     multiple_choice:
       choices:
@@ -1345,22 +1345,24 @@ extending_loadingcomponent:
           `created` should be used only when you need to perform asynchronous operations
           when the component is instantiated.
         d: |
-          `created` is an internal function and should never be used.
+          `created` is an internal function and should not be used directly.
       correct: a
 
 extending_data_global_classes:
   question: |
     Suppose we have a global piece of data that we need to render in our template. This
-    data is `window.turtleRandomFact` and contains a special fact about turtles that we randomly
-    get from the server each time a template loads. Sweet!
+    data is `window.randomTurtleFact` and contains a special fact about turtles that we randomly
+    get from the server each time a template loads. Sweet! Sea turtles can't retract
+    their heads and flippers!
 
     Which of these examples would *fail* to render that global variable in the template?
   explanation: |
-    That is correct! While `data` and `computed` are probably the best two options here,
-    there's nothing really wrong with getting it from a `method`.
+    That is correct! While `data` and `computed` are probably the best two options here
+    there's nothing really wrong with getting it from a method.
 
     > Remember that referencing global variables in the template isn't possible because
-    > everything you type in there is bound to the magic `this` object.
+    > everything there is bound to the magic `this` object. So, `window.randomTurtleFact`
+    > effectively means `this.window.randomTurtleFact`.
   features:
     multiple_choice:
       choices:
@@ -1369,7 +1371,7 @@ extending_data_global_classes:
           <template>
               <h1>I love turtles</h1>
 
-              <p>{{ window.turtleRandomFact }}</p>
+              <p>{{ window.randomTurtleFact }}</p>
           </template>
 
           <script>
@@ -1383,7 +1385,7 @@ extending_data_global_classes:
           <template>
               <h1>I love turtles</h1>
 
-              <p>{{ turtleRandomFact }}</p>
+              <p>{{ randomTurtleFact }}</p>
           </template>
 
           <script>
@@ -1391,7 +1393,7 @@ extending_data_global_classes:
               name: 'MainComponent',
               data() {
                   return {
-                      turtleRandomFact: window.turtleRandomFact,
+                      randomTurtleFact: window.randomTurtleFact,
                   };
               },
           };
@@ -1402,15 +1404,15 @@ extending_data_global_classes:
           <template>
               <h1>I love turtles</h1>
 
-              <p>{{ turtleRandomFact }}</p>
+              <p>{{ randomTurtleFact }}</p>
           </template>
 
           <script>
           export default {
               name: 'MainComponent',
               computed: {
-                  turtleRandomFact() {
-                      return window.turtleRandomFact;
+                  randomTurtleFact() {
+                      return window.randomTurtleFact;
                   },
               },
           };
@@ -1421,15 +1423,15 @@ extending_data_global_classes:
           <template>
               <h1>I love turtles</h1>
 
-              <p>{{ getTurtleRandomFact() }}</p>
+              <p>{{ getRandomTurtleFact() }}</p>
           </template>
 
           <script>
           export default {
               name: 'MainComponent',
               methods: {
-                  getTurtleRandomFact() {
-                      return window.turtleRandomFact;
+                  getRandomTurtleFact() {
+                      return window.randomTurtleFact;
                   },
               },
           };
@@ -1439,16 +1441,14 @@ extending_data_global_classes:
 
 extending_page_context_service:
   question: |
-    Suppose we have an application that has to fetch a random fact about turtles and
-    we implement a service to do this for us. Due to the nature of our development
-    process, the way we fetch this data changes over time, so we end up with several
-    versions of this service.
+    Suppose we have an application that needs to fetch a random fact about turtles and
+    we implement a service to do this for us.
 
-    Which one of these code examples would *not* constitute such a service?
+    Ignoring the fact that 3 of these use AJAX and 1 reads from a global variable
+    (a service could do either), which one of the options is *not* a valid service?
   explanation: |
     That's correct! A service should do work for us and return something that we can use
-    right away (even if it's just a promise!). It is always expected that a service
-    returns something when calling it or one of its methods!
+    right away (even if that's just a promise!).
   features:
     multiple_choice:
       choices:
@@ -1465,7 +1465,7 @@ extending_page_context_service:
           export const randomTurtleFact = '';
 
           export function async getRandomTurtleFact() {
-              const response = await axios.get('api/random-fact');
+              const response = await axios.get('/api/random-fact');
 
               randomTurtleFact = response.data.message;
           }
@@ -1475,7 +1475,7 @@ extending_page_context_service:
           import axios from 'axios';
 
           export default function getRandomTurtleFact() {
-              return axios.get('api/turtles/random-fact');
+              return axios.get('/api/turtles/random-fact');
           }
           ```
         d: |
@@ -1484,7 +1484,7 @@ extending_page_context_service:
 
           const myTurtleService = {
               async function getRandomTurtleFact() {
-                  const response = await axios.get('api/turtles/fact');
+                  const response = await axios.get('/api/turtles/fact');
 
                   return response.data.message;
               },
@@ -1496,9 +1496,9 @@ extending_page_context_service:
 
 extending_smarter_loading:
   question: |
-    In this section, we say that you can wrap an `away` call in a `try...catch`
-    to catch any errors that may arise during that ajax call. We also say that we
-    should limit that `try...catch` to just the statement that performs the call.
+    In this section, we learned that you can wrap any AJAX call in a `try...catch`
+    to catch any errors that may arise during that AJAX call. We also say that we
+    should limit that `try...catch` to *just* the statement that performs the call.
 
     Here's an example:
 
@@ -1519,21 +1519,26 @@ extending_smarter_loading:
     },
     ```
 
-    Why do we say that `try...catch` should only include the ajax call?
+    Why is it important that the `try...catch` *only* includes the AJAX call?
   explanation: |
     That's right! To avoid having unexposed bugs in the code, we should limit
-    `try...catch` in general to *only* the code that we know it *can* fail, but
-    that wouldn't necessary mean that our application is broken. For example, in
-    this case, the user might be having a sudden internet loss.
+    `try...catch` in general to *only* the code that we know *can* fail under
+    normal, expected circumstances - like if the user has a connection error
+    or the server returns a 400 error if validation fails (if the AJAX call
+    is sending data).
+
+    Putting any code in a try catch that should *never* fail - like
+    `this.products = response.data` - could accidentally hide the error for an
+    edge-case that we hadn't thought about.
   features:
     multiple_choice:
       choices:
         a: |
-          Because the other parts of our code are very straight forward
-          and can never break.
+          Because the other parts of our code are very straightforward
+          and can never break - having them in the try-catch isn't necessary.
         b: |
-          Because `try...catch` takes a lot of resources in the Browser, so
-          we shouldn't abuse it.
+          Because `try...catch` takes a lot of resources in the browser, so
+          we should use it only when absolutely necessary.
         c: |
           Because if we expand the `try...catch` to other lines of code, we might
           be hiding a real bug in our application.
@@ -1544,25 +1549,32 @@ extending_smarter_loading:
 
 extending_skipping_ajax:
   question: |
-    Too much loading in an application can be really bad! For that reason,
-    we decide to opt for alternative methods other than Ajax calls for some
-    parts of it.
+    Too much loading in an app can be really bad! For that reason,
+    we've decide to avoid AJAX calls for some parts of it.
 
-    In our example, we load the current category and the list of categories,
-    but we leave the list of products unloaded, so once the application
-    bootstraps, it *has* to do that Ajax call.
+    In our app, we pass the current category and the list of categories directly
+    from the server, but *not* the list of *products*. Then, once the app
+    bootstraps, we *must* make an AJAX call for the products.
 
-    In theory, we could just dump everything in our template and have the
-    page load instantly... But... why don't we do that?
+    In theory... we could just dump everything in our template and have the
+    page load instantly... So... why don't we do that?
   explanation: |
-    That's right! Our products change all the time. They could even change
-    every day! This would, for example, invalidate possible caching of the
-    twig template every time our list of products change. Yikes!
+    This is a tricky one! And it depends on your app!
 
-    In the case of data that is changing all the time, it's even better for
-    our application to have it loaded using an external Ajax call. This means
-    that our backend and template stay always the same, while the ever-changing
-    data is built by our Browser once that template loads!
+    First, even though the products are highly dynamic (they change much more often
+    than the categories), we could still pass them directly from the server.
+    However, if you used HTTP caching for your HTML response, you *would* need to
+    invalidate that cache more often. But other than this edge-case, it's no problem!
+
+    There *is* a tradeoff between loading more data in your controller versus
+    making an AJAX call. Loading the products data in your controller *would* slow
+    down how fast your server responds. But then, the data would be there instantly!
+    The right answer depends on (A) how important the data is to the page (the less
+    important, the more it makes sense to lazily load via an AJAX call) and (B)
+    how heavy the data is (the heavier, the more it makes sense to delay loading
+    to an AJAX call so that *some* part of the page can render quickly).
+
+    Overall, remember to not optimize too early - you can always improve later!
   features:
     multiple_choice:
       choices:
@@ -1570,32 +1582,39 @@ extending_skipping_ajax:
           Because if we did that, our HTML source would be too large and
           hard to read.
         b: |
-          Because having our controller do that much work on fetching data
-          would make the page really slow.
+          We could do that, but it would mean that our controller code needs
+          to load more data. And so, the whole page would take longer to return
+          from the server.
         c: |
-          Because our Products data come from an external source, so we
+          Because our products data come from an external source, so we
           have no choice but to load them using an external API.
         d: |
-          Because our Products are a highly volatile piece of data, meaning,
-          they change all the time, so it's better to load them via Ajax.
-      correct: d
+          Because our products are a highly volatile piece of data, meaning,
+          they change all the time, so it's better to load them via AJAX.
+      correct: b
 
 extending_skipping_ajax2:
   question: |
-    Which of these examples of data is *not* a good candidate to have preloaded
-    in a template?
+    Which of these examples would be a good candidate to fetch via an
+    AJAX call instead of passing the data directly from the server?
   explanation: |
-    That's right. Data that stays the same, or data that is already being fetched
-    by symfony (like our user data) are good candidates for skipping an Ajax call.
+    Another tricky one! And it ultimately depends on your app. Because the
+    promotions information is probably *not* a critical component of the page
+    *and* because it requires some heavy data calculation, it might be better
+    to load that information via AJAX so that the initial page load is faster.
 
-    On the other hand, data that is subject to change all the time are not!
+    All the other information - including the authenticated user information - is
+    probably needed to render important parts of the page. Having this
+    data immediately will give a better user experience.
   features:
     multiple_choice:
       choices:
         a: |
-          The user information and weather it's logged in or not.
+          The currently-authenticated user information / whether the user is logged
+          in or not.
         b: |
-          The currently available promotions that we offer in our website.
+          The currently available promotions that we offer on our website,
+          which requires a heavy data calculation to determine.
         c: |
           Stuff that goes in our sidebar, like the list of categories.
         d: |
@@ -1608,9 +1627,9 @@ extending_passing_props_vs_fetching:
     passing down data that is reactive?
   explanation: |
     That's right! Even if data is available through a service, if we later want
-    to *change* such data and have its changes propagate propertly throughout our
+    to *change* that data and have its changes propagate properly throughout our
     application, we *need* to pass it down as props to other components that depend
-    on it! In Vue 2 it's the only way!
+    on it! With Vuex or Vue 3, there *are* other options.
   features:
     multiple_choice:
       choices:
@@ -1630,6 +1649,7 @@ extending_passing_props_vs_fetching:
 extending_v_model:
   question: |
     I just created my own `input` element with a `v-model` directive in it!
+    Woo!
 
     ```vue
     <input
@@ -1643,13 +1663,13 @@ extending_v_model:
   explanation: |
     That's right! As we've just seen, `v-model` is responsible for setting the
     `value` property of the element to `firstName` and *also* wiring the `@input`
-    event so that changes to the input reflect back on the property!
+    event so that changes to the input *set* the `firstName` data.
 
-    This is effectibly a double binding of our `firstName` data into the HTML
+    This is effectibly a double-binding of our `firstName` data into the HTML
     component.
 
-    This however doesn't include the creation of the `data` member `firstName`. This
-    must already exist in our component for it to work!
+    But `v-model` does *not* also create the `firstName` key in `data`. That's
+    our job!
   features:
     multiple_choice:
       choices:
@@ -1669,11 +1689,11 @@ extending_v_model:
 extending_filtering_products:
   question: |
     I LOVE hamsters. In fact, I love them so much that I wronte a Vue application
-    that keeps track of all the hamsters I own.
+    that keeps track of all the hamsters I own. It's... a lot.
 
-    One of the key parts of this application is the Hamster Counter component, which
-    has to keep track of the total number of hamsters I own and print it on the screen,
-    but I'm having trouble wiring the custom events that I created!
+    One of the key parts of the app is the Hamster Counter component, which
+    has to keep track of the total number of hamsters I own and print it on the screen.
+    But, I'm having trouble wiring the custom events that I created!
 
     ```vue
     <template>
@@ -1688,7 +1708,7 @@ extending_filtering_products:
     ```
 
     What would the `script` section of this component look like in order to make
-    this work?
+    this work (and be the best solution)?
   explanation: |
     Excellent job! That solution will keep the length as a `data` property in
     my main component that will automatically update my counter's `totalHamsters`
@@ -1782,10 +1802,12 @@ extending_async_computed:
   explanation: |
     That's right! A computed property function is executed whenever any of the reactive
     properties used inside it changes. This happens in the context of a re-render, meaning
-    that the value that the computed property returns needs to be applied *immediately*!
+    that the value that the computed property returns needs to be used *immediately*
+    to render the template
 
-    If a computed property returns a Promise, this isn't a real value, so the re-render
-    wouldn't be able to finish!
+    If a computed property returns a Promise... then a *Promise* (not the actual
+    value you want) will be rendered in the template or passed down to child
+    components as a prop. That's not what we want!
 
     > The concept of `reactivity` involves *No Promises*! Whenever a value change,
     > the template "reacts" at once!
@@ -1793,45 +1815,50 @@ extending_async_computed:
     multiple_choice:
       choices:
         a: |
-          Because it hasn't been implemented by Vue.
+          Because it hasn't been implemented by Vue, but will be in Vue 3.
         b: |
-          Because its return type cannot be a Promise.
+          Because if you return a `Promise`... Vue will try to print a `Promise`
+          in the template.
         c: |
-          Because it's a bad practice to do so.
+          They can! But it's considered a bad practice.
         d: |
-          Because the `async` keyword results in a syntax error in thast context.
+          Because the `async` keyword results in a syntax error in that context.
       correct: b
 
 extending_business_helpers:
   question: |
-    Helpers are very useful aids to our applications! But what are
-    helpers NOT useful for?
+    Helpers are useful aids to our app! But what are
+    helpers NOT useful for as we're using them in this app?
   explanation: |
     Correct! If a so called *helper* is making API calls or preparing a piece of
     data from outside of our application to be used inside, we usually call them
-    `services`. The difference is subtle, but more often than not, programmers
-    will refer to `helpers` as simple procesing functions.
+    `services`.
+
+    These terms - helpers & services - aren't universal definitions that are
+    always used in this way. The important thing is that it's nice to separate
+    your "pure functions that process logic and return something" (i.e. helpers)
+    from "functions that manage data" (i.e. services).
   features:
     multiple_choice:
       choices:
         a: |
-          Helpers are usefull for separating a piece of code that we want to
+          Helpers are useful for separating a piece of code that we want to
           re-use elsewhere.
         b: |
-          Helpers are usefull for extracting a piece of our application logic that
+          Helpers are useful for extracting a piece of our app logic that
           we want to unit-test.
         c: |
-          Helpers are usefull for extracting API calls and general managing our data
+          Helpers are useful for extracting API calls and managing data
           processing needs in our application.
         d: |
-          Helpers are usefull for extracting part of our logic out of a component so
+          Helpers are useful for extracting part of our logic out of a component so
           that the component is easier to read and maintian.
       correct: c
 
 extending_business_helpers2:
   question: |
-    So I have set up this awesome helper that helps me put Pineapple on top of
-    regular pizzas! Here it is:
+    So I just set up this awesome helper that "helps" me put pineapple on top of
+    regular pizzas! Yum! Here it is:
 
     ```javascript
     export default (pizzaTopping) => (
@@ -1840,14 +1867,16 @@ extending_business_helpers2:
     ```
 
     Now I want to use it in my pizza component so that every pizza topping has
-    Pineapple on it! Which of these examples would *not* make it work?
+    pineapple on it! Which of these examples would *not* make it work?
   explanation: |
-    Exactly! Just like in our video, one of the simplest ways of using a helper
+    Exactly! Just like in our video, one of the simplest ways to use a helper
     to process some data that we want to output into our template is to have a
-    computed property make the work.
+    computed property do the work.
 
-    But you can also use other methods, like wrapping the helper inside a method,
-    or having it initialize inside your data function!
+    But you can also use other options, like wrapping the helper inside a method,
+    or having it initialize inside your data function. But be careful with this
+    last option - in this example, there isn't a good reason to "duplicate" the
+    toppings by adding a new `data` variable.
   features:
     multiple_choice:
       choices:
@@ -1946,7 +1975,7 @@ extending_business_helpers2:
 
 extending_watchers:
   question: |
-    It is said that `watchers` are our last resort in Vue. We should use them
+    It is said that `watchers` are our last resort in Vue: we should use them
     when no alternative method is present.
 
     More specifically, when should watchers be used in Vue?
@@ -1954,11 +1983,12 @@ extending_watchers:
     That's right! If you need to perform an asynchronous operation as a result
     of a data or prop change, computed properties won't work for you!
 
-    Usually, you want to have some event being emitted so that you can respond
-    to them, but if you don't have that option, use watchers!
+    Ideally, there will be some event being emitted that you can respond to - e.g.
+    "on click" of a button, you would trigger an AJAX call that would change some
+    data. But if you don't have that option, use watchers!
 
     > Watchers are also useful to detect changes in `props`, where no other clear
-    > method exists.
+    > option exists.
   features:
     multiple_choice:
       choices:
@@ -1966,8 +1996,8 @@ extending_watchers:
           If we need to perform an asynchronous operation when the component
           loads, we should use watchers.
         b: |
-          If we need to listen to changes to data members a lot, we should
-          use watchers.
+          If we need to *frequently* listen to changes to data keys, a
+          watcher is better.
         c: |
           If we need to listen to a prop change, or we need to perform an
           asynchronous operation as a result of some data change, we should
@@ -1979,11 +2009,11 @@ extending_watchers:
 extending_watchers2:
   question: |
     In my CarTitle component, I receive a `car` prop that contains both `model` and
-    `brand` as separate members. This prop changes because the user can
-    choose from 2 drop down menus that exist elsewhere in the page.
+    `brand` as separate keys. These two keys change when a user selects different
+    options from 2 `select` elements that exist elsewhere on the page.
 
-    What I'd like to do is listen to these prop change and automatically update
-    my car title!
+    What I'd like to do is "listen" to these prop change and automatically update
+    the car title in the template.
 
     Which of these examples would do the job in the best way?
   explanation: |
