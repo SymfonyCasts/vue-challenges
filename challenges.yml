@@ -1319,3 +1319,761 @@ extending_smartvsdumbcomponents:
           A smart component usually does AI related things, like image processing, while
           a dumb component handles the rest of the application logic.
       correct: b
+
+extending_loadingcomponent:
+  question: |
+    In Vue, when should we use `created` instead of `mounted` for our components?
+  explanation: |
+    That's right! `created` will execute as soon as the component is instantiated. Even
+    though the DOM structure still *isn't* mounted, you still can perform any other
+    operations that deal with reactive data!
+
+    `mounted`, on the other hand, will be executed once the component has been mounted
+    in the DOM. This is usefull for any edge case in which you need to manipulate the
+    dom directly!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          `created` should be used when you need to perform an action as soon as
+          the component has been instantiated but you don't need access to the DOM
+          directly.
+        b: |
+          `created` should be used only when you need to perform synchronous operations
+          when the component is instantiated.
+        c: |
+          `created` should be used only when you need to perform asynchronous operations
+          when the component is instantiated.
+        d: |
+          `created` is an internal function and should never be used.
+      correct: a
+
+extending_data_global_classes:
+  question: |
+    Suppose we have a global piece of data that we need to render in our template. This
+    data is `window.turtleRandomFact` and contains a special fact about turtles that we randomly
+    get from the server each time a template loads. Sweet!
+
+    Which of these examples would *fail* to render that global variable in the template?
+  explanation: |
+    That is correct! While `data` and `computed` are probably the best two options here,
+    there's nothing really wrong with getting it from a `method`.
+
+    > Remember that referencing global variables in the template isn't possible because
+    > everything you type in there is bound to the magic `this` object.
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          <template>
+              <h1>I love turtles</h1>
+
+              <p>{{ window.turtleRandomFact }}</p>
+          </template>
+
+          <script>
+          export default {
+              name: 'MainComponent',
+          };
+          </script>
+          ```
+        b: |
+          ```vue
+          <template>
+              <h1>I love turtles</h1>
+
+              <p>{{ turtleRandomFact }}</p>
+          </template>
+
+          <script>
+          export default {
+              name: 'MainComponent',
+              data() {
+                  return {
+                      turtleRandomFact: window.turtleRandomFact,
+                  };
+              },
+          };
+          </script>
+          ```
+        c: |
+          ```vue
+          <template>
+              <h1>I love turtles</h1>
+
+              <p>{{ turtleRandomFact }}</p>
+          </template>
+
+          <script>
+          export default {
+              name: 'MainComponent',
+              computed: {
+                  turtleRandomFact() {
+                      return window.turtleRandomFact;
+                  },
+              },
+          };
+          </script>
+          ```
+        d: |
+          ```vue
+          <template>
+              <h1>I love turtles</h1>
+
+              <p>{{ getTurtleRandomFact() }}</p>
+          </template>
+
+          <script>
+          export default {
+              name: 'MainComponent',
+              methods: {
+                  getTurtleRandomFact() {
+                      return window.turtleRandomFact;
+                  },
+              },
+          };
+          </script>
+          ```
+      correct: a
+
+extending_page_context_service:
+  question: |
+    Suppose we have an application that has to fetch a random fact about turtles and
+    we implement a service to do this for us. Due to the nature of our development
+    process, the way we fetch this data changes over time, so we end up with several
+    versions of this service.
+
+    Which one of these code examples would *not* constitute such a service?
+  explanation: |
+    That's correct! A service should do work for us and return something that we can use
+    right away (even if it's just a promise!). It is always expected that a service
+    returns something when calling it or one of its methods!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```javascript
+          export default function getRandomTurtleFact() {
+              return window.randomTurtleFact;
+          }
+          ```
+        b: |
+          ```javascript
+          import axios from 'axios';
+
+          export const randomTurtleFact = '';
+
+          export function async getRandomTurtleFact() {
+              const response = await axios.get('api/random-fact');
+
+              randomTurtleFact = response.data.message;
+          }
+          ```
+        c: |
+          ```javascript
+          import axios from 'axios';
+
+          export default function getRandomTurtleFact() {
+              return axios.get('api/turtles/random-fact');
+          }
+          ```
+        d: |
+          ```javascript
+          import axios from 'axios';
+
+          const myTurtleService = {
+              async function getRandomTurtleFact() {
+                  const response = await axios.get('api/turtles/fact');
+
+                  return response.data.message;
+              },
+          };
+
+          export default myTurtleService;
+          ```
+      correct: b
+
+extending_smarter_loading:
+  question: |
+    In this section, we say that you can wrap an `away` call in a `try...catch`
+    to catch any errors that may arise during that ajax call. We also say that we
+    should limit that `try...catch` to just the statement that performs the call.
+
+    Here's an example:
+
+    ```vue
+    async created() {
+        this.loading = true;
+        let response;
+
+        try {
+            response = await axios.get('/api/get-turtle');
+        } catch(e) {
+            this.loading = false;
+            return;
+        }
+
+        this.loading = false;
+        this.products = response.data;
+    },
+    ```
+
+    Why do we say that `try...catch` should only include the ajax call?
+  explanation: |
+    That's right! To avoid having unexposed bugs in the code, we should limit
+    `try...catch` in general to *only* the code that we know it *can* fail, but
+    that wouldn't necessary mean that our application is broken. For example, in
+    this case, the user might be having a sudden internet loss.
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          Because the other parts of our code are very straight forward
+          and can never break.
+        b: |
+          Because `try...catch` takes a lot of resources in the Browser, so
+          we shouldn't abuse it.
+        c: |
+          Because if we expand the `try...catch` to other lines of code, we might
+          be hiding a real bug in our application.
+        d: |
+          Because we should only handle possible bugs related to our API and not our
+          application.
+      correct: c
+
+extending_skipping_ajax:
+  question: |
+    Too much loading in an application can be really bad! For that reason,
+    we decide to opt for alternative methods other than Ajax calls for some
+    parts of it.
+
+    In our example, we load the current category and the list of categories,
+    but we leave the list of products unloaded, so once the application
+    bootstraps, it *has* to do that Ajax call.
+
+    In theory, we could just dump everything in our template and have the
+    page load instantly... But... why don't we do that?
+  explanation: |
+    That's right! Our products change all the time. They could even change
+    every day! This would, for example, invalidate possible caching of the
+    twig template every time our list of products change. Yikes!
+
+    In the case of data that is changing all the time, it's even better for
+    our application to have it loaded using an external Ajax call. This means
+    that our backend and template stay always the same, while the ever-changing
+    data is built by our Browser once that template loads!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          Because if we did that, our HTML source would be too large and
+          hard to read.
+        b: |
+          Because having our controller do that much work on fetching data
+          would make the page really slow.
+        c: |
+          Because our Products data come from an external source, so we
+          have no choice but to load them using an external API.
+        d: |
+          Because our Products are a highly volatile piece of data, meaning,
+          they change all the time, so it's better to load them via Ajax.
+      correct: d
+
+extending_skipping_ajax2:
+  question: |
+    Which of these examples of data is *not* a good candidate to have preloaded
+    in a template?
+  explanation: |
+    That's right. Data that stays the same, or data that is already being fetched
+    by symfony (like our user data) are good candidates for skipping an Ajax call.
+
+    On the other hand, data that is subject to change all the time are not!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          The user information and weather it's logged in or not.
+        b: |
+          The currently available promotions that we offer in our website.
+        c: |
+          Stuff that goes in our sidebar, like the list of categories.
+        d: |
+          The current category id or name.
+      correct: b
+
+extending_passing_props_vs_fetching:
+  question: |
+    Which of these cases is NOT a valid reason to skip the use of props for
+    passing down data that is reactive?
+  explanation: |
+    That's right! Even if data is available through a service, if we later want
+    to *change* such data and have its changes propagate propertly throughout our
+    application, we *need* to pass it down as props to other components that depend
+    on it! In Vue 2 it's the only way!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          My application uses Vuex, so its data is available from every component
+          and is reactive.
+        b: |
+          In Vue 3, I have reactive data as outside modules that I can import
+          from anywhere.
+        c: |
+          The data I'm passing down in props is available as a service.
+        d: |
+          The data will never change, and it's globally available, so it doesn't have
+          to be reactive.
+      correct: c
+
+extending_v_model:
+  question: |
+    I just created my own `input` element with a `v-model` directive in it!
+
+    ```vue
+    <input
+        type="text"
+        placeholder="Enter your name..."
+        v-model="firstName"
+    />
+    ```
+
+    What is `v-model` NOT responsible for in this case?
+  explanation: |
+    That's right! As we've just seen, `v-model` is responsible for setting the
+    `value` property of the element to `firstName` and *also* wiring the `@input`
+    event so that changes to the input reflect back on the property!
+
+    This is effectibly a double binding of our `firstName` data into the HTML
+    component.
+
+    This however doesn't include the creation of the `data` member `firstName`. This
+    must already exist in our component for it to work!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          It creates a `firstName` data property for us to use in the rest of our
+          component.
+        b: |
+          It sets my element's `:value` property to `firstName`, which lives
+          in my `data`.
+        c: |
+          It will set my data property `firstName` to the contents of the input
+          whenever the user changes it, using `@input`.
+        d: |
+          It binds my data property `firstName` to our `input` element.
+      correct: a
+
+extending_filtering_products:
+  question: |
+    I LOVE hamsters. In fact, I love them so much that I wronte a Vue application
+    that keeps track of all the hamsters I own.
+
+    One of the key parts of this application is the Hamster Counter component, which
+    has to keep track of the total number of hamsters I own and print it on the screen,
+    but I'm having trouble wiring the custom events that I created!
+
+    ```vue
+    <template>
+        <div>
+            <h1>Hamster List</h1>
+            <hamster-manager @on-hamster-list-update="updateCounter" />
+        </div>
+        <div>
+            <hamster-counter :total-hamsters="totalHamsters" />
+        </div>
+    </template>
+    ```
+
+    What would the `script` section of this component look like in order to make
+    this work?
+  explanation: |
+    Excellent job! That solution will keep the length as a `data` property in
+    my main component that will automatically update my counter's `totalHamsters`
+    prop!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          <script>
+          export default {
+              name: 'MainComponent',
+              computed: {
+                  totalHamsters() {
+                      return 0;
+                  }
+              },
+              methods: {
+                  updateCounter(data) {
+                      this.totalHamsters = data.length;
+                  },
+              },
+          };
+          </script>
+          ```
+        b: |
+          ```vue
+          <script>
+          export default {
+              name: 'MainComponent',
+              data() {
+                  return {
+                      hamstersLength: 0,
+                  };
+              },
+              computed: {
+                  totalHamsters() {
+                      return hamstersLength;
+                  }
+              }
+              methods: {
+                  updateCounter(data) {
+                      this.hamstersLength = data.length;
+                  },
+              },
+          };
+          </script>
+          ```
+        c: |
+          ```vue
+          <script>
+          export default {
+              name: 'MainComponent',
+              props: {
+                  totalHamsters: {
+                      type: Number,
+                      default: 0,
+                  },
+              },
+              methods: {
+                  updateCounter(data) {
+                      this.totalHamsters = data.length;
+                  },
+              },
+          };
+          </script>
+          ```
+        d: |
+          ```vue
+          <script>
+          export default {
+              name: 'MainComponent',
+              data() {
+                  return {
+                      totalHamsters: 0,
+                  };
+              },
+              methods: {
+                  updateCounter(data) {
+                      this.totalHamsters = data.length;
+                  },
+              },
+          };
+          </script>
+          ```
+      correct: d
+
+extending_async_computed:
+  question: |
+    Why can't computed properties be asynchronous?
+  explanation: |
+    That's right! A computed property function is executed whenever any of the reactive
+    properties used inside it changes. This happens in the context of a re-render, meaning
+    that the value that the computed property returns needs to be applied *immediately*!
+
+    If a computed property returns a Promise, this isn't a real value, so the re-render
+    wouldn't be able to finish!
+
+    > The concept of `reactivity` involves *No Promises*! Whenever a value change,
+    > the template "reacts" at once!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          Because it hasn't been implemented by Vue.
+        b: |
+          Because its return type cannot be a Promise.
+        c: |
+          Because it's a bad practice to do so.
+        d: |
+          Because the `async` keyword results in a syntax error in thast context.
+      correct: b
+
+extending_business_helpers:
+  question: |
+    Helpers are very useful aids to our applications! But what are
+    helpers NOT useful for?
+  explanation: |
+    Correct! If a so called *helper* is making API calls or preparing a piece of
+    data from outside of our application to be used inside, we usually call them
+    `services`. The difference is subtle, but more often than not, programmers
+    will refer to `helpers` as simple procesing functions.
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          Helpers are usefull for separating a piece of code that we want to
+          re-use elsewhere.
+        b: |
+          Helpers are usefull for extracting a piece of our application logic that
+          we want to unit-test.
+        c: |
+          Helpers are usefull for extracting API calls and general managing our data
+          processing needs in our application.
+        d: |
+          Helpers are usefull for extracting part of our logic out of a component so
+          that the component is easier to read and maintian.
+      correct: c
+
+extending_business_helpers2:
+  question: |
+    So I have set up this awesome helper that helps me put Pineapple on top of
+    regular pizzas! Here it is:
+
+    ```javascript
+    export default (pizzaTopping) => (
+        pizzaTopping + ' with Pineapple!'
+    );
+    ```
+
+    Now I want to use it in my pizza component so that every pizza topping has
+    Pineapple on it! Which of these examples would *not* make it work?
+  explanation: |
+    Exactly! Just like in our video, one of the simplest ways of using a helper
+    to process some data that we want to output into our template is to have a
+    computed property make the work.
+
+    But you can also use other methods, like wrapping the helper inside a method,
+    or having it initialize inside your data function!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          <template>
+              <h1>{{ pizza.name }}</h1>
+
+              <h2>Topping:</h2>
+
+              <p>{{ pizzaTopping }}</p>
+          </template>
+
+          <script>
+          import getPizzaWithPineapple from '@/helpers/get-pizza-with-pineapple';
+
+          export default {
+              name: 'PizzaComponent',
+              props: ['pizza'],
+              computed: {
+                  pizzaTopping() {
+                      return getPizzaWithPineapple(pizza.topping);
+                  },
+              },
+          };
+          </script>
+          ```
+        b: |
+          ```vue
+          <template>
+              <h1>{{ pizza.name }}</h1>
+
+              <h2>Topping:</h2>
+
+              <p>{{ getPizzaWithPineapple(pizza.topping) }}</p>
+          </template>
+
+          <script>
+          import getPizzaWithPineapple from '@/helpers/get-pizza-with-pineapple';
+
+          export default {
+              name: 'PizzaComponent',
+              props: ['pizza'],
+          };
+          </script>
+          ```
+        c: |
+          ```vue
+          <template>
+              <h1>{{ pizza.name }}</h1>
+
+              <h2>Topping:</h2>
+
+              <p>{{ getPizzaTopping() }}</p>
+          </template>
+
+          <script>
+          import getPizzaWithPineapple from '@/helpers/get-pizza-with-pineapple';
+
+          export default {
+              name: 'PizzaComponent',
+              props: ['pizza'],
+              methods: {
+                  getPizzaTopping() {
+                      return getPizzaWithPineapple(pizza.topping);
+                  }
+              },
+          };
+          </script>
+          ```
+        d: |
+          ```vue
+          <template>
+              <h1>{{ pizza.name }}</h1>
+
+              <h2>Topping:</h2>
+
+              <p>{{ pizzaTopping }}</p>
+          </template>
+
+          <script>
+          import getPizzaWithPineapple from '@/helpers/get-pizza-with-pineapple';
+
+          export default {
+              name: 'PizzaComponent',
+              props: ['pizza'],
+              data() {
+                  return {
+                      pizzaTopping: getPizzaWithPineapple(pizza.topping)
+                  };
+              },
+          };
+          </script>
+          ```
+      correct: b
+
+extending_watchers:
+  question: |
+    It is said that `watchers` are our last resort in Vue. We should use them
+    when no alternative method is present.
+
+    More specifically, when should watchers be used in Vue?
+  explanation: |
+    That's right! If you need to perform an asynchronous operation as a result
+    of a data or prop change, computed properties won't work for you!
+
+    Usually, you want to have some event being emitted so that you can respond
+    to them, but if you don't have that option, use watchers!
+
+    > Watchers are also useful to detect changes in `props`, where no other clear
+    > method exists.
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          If we need to perform an asynchronous operation when the component
+          loads, we should use watchers.
+        b: |
+          If we need to listen to changes to data members a lot, we should
+          use watchers.
+        c: |
+          If we need to listen to a prop change, or we need to perform an
+          asynchronous operation as a result of some data change, we should
+          use watchers.
+        d: |
+          We should never use watchers. They are deprecated!
+      correct: c
+
+extending_watchers2:
+  question: |
+    In my CarTitle component, I receive a `car` prop that contains both `model` and
+    `brand` as separate members. This prop changes because the user can
+    choose from 2 drop down menus that exist elsewhere in the page.
+
+    What I'd like to do is listen to these prop change and automatically update
+    my car title!
+
+    Which of these examples would do the job in the best way?
+  explanation: |
+    Perfect! Since our operation is totally synchronous for now, we really do NOT
+    need to implement a watcher here. A computed property would work just fine!
+
+    > Remember, watchers are to be used when no other good method is available to us!
+  features:
+    multiple_choice:
+      choices:
+        a: |
+          ```vue
+          <template>
+              <h1>{{ carName }}</h1>
+          </template>
+
+          <script>
+          export default {
+              name: 'CarTitle',
+              props: ['car'],
+              computed: {
+                  carName() {
+                      return car.brand + ' ' + car.model;
+                  },
+              },
+          };
+          </script>
+          ```
+        b: |
+          ```vue
+          <template>
+              <h1>{{ carName }}</h1>
+          </template>
+
+          <script>
+          export default {
+              name: 'CarTitle',
+              props: ['car'],
+              data() {
+                  return {
+                      carName: car.brand + ' ' + car.model,
+                  };
+              },
+              watchers: {
+                  car(newVal) {
+                      this.carName = newVal.brand + ' ' + newVal.model;
+                  },
+              },
+          };
+          </script>
+          ```
+        c: |
+          ```vue
+          <template>
+              <h1>{{ carName }}</h1>
+          </template>
+
+          <script>
+          export default {
+              name: 'CarTitle',
+              props: ['car'],
+              data() {
+                  return {
+                      carName: this.getCarName(),
+                  };
+              },
+              methods: {
+                  getCarName() {
+                      return car.brand + ' ' + car.model;
+                  },
+              },
+          };
+          </script>
+          ```
+        d: |
+          ```vue
+          <template>
+              <h1>{{ getCarName }}</h1>
+          </template>
+
+          <script>
+          export default {
+              name: 'CarTitle',
+              props: ['car'],
+              methods: {
+                  getCarName() {
+                      return car.brand + ' ' + car.model;
+                  },
+              },
+          };
+          </script>
+          ```
+      correct: a
