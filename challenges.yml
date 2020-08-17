@@ -1688,7 +1688,7 @@ extending_v_model:
 
 extending_filtering_products:
   question: |
-    I LOVE hamsters. In fact, I love them so much that I wronte a Vue application
+    I LOVE hamsters. In fact, I love them so much that I wrote a Vue application
     that keeps track of all the hamsters I own. It's... a lot.
 
     One of the key parts of the app is the Hamster Counter component, which
