@@ -835,7 +835,7 @@ extending_reactivity:
     That's right! Vue turns your `data` and `prop` members into getter and setter functions.
     When those properties are complex objects, it even does this recursively!
     When you access a key in `data` or `props`, Vue uses the getter to keep an
-    internal list of all components thta *use* that key. And when you *set*
+    internal list of all components that *use* that key. And when you *set*
     a key on `data`, Vue is then able to notify all components that use that key.
     *Then* those components can re-render.
 
