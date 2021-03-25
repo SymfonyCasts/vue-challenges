@@ -627,7 +627,7 @@ extending_vfor:
     },
     ```
 
-    Delicious! Now e want to loop through these fruits and show each of them in a `span`
+    Delicious! Now we want to loop through these fruits and show each of them in a `span`
     element. What's the best way to accomplish this?
   explanation: |
     That's correct! The `v-for` directive will produce copies of itself,
